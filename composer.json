@@ -1,0 +1,17 @@
+{
+    "name": "miroenne/touchepasauklaxon",
+    "description": "Devoir de formation sur le langage PHP",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Miroenne"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {}
+}

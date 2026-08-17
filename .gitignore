@@ -1,0 +1,5 @@
+/noFollowDirectory
+._*
+.DS_Store
+
+/vendor/
