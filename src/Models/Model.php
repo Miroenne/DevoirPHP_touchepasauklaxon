@@ -28,6 +28,19 @@ abstract class Model
         return array_combine($keys, $values);
     }
 
+    public function toClass(array $array): static
+    {
+        $string = [];
+
+        foreach ($array as $key => $value) {
+            $string[] = $key . ' : ' . match (true) {
+            };
+        }
+
+        $result = implode(', ', $string);
+
+        return new static($result);
+    }
 
     public function getId(): ?int
     {

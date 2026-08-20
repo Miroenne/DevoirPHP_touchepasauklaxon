@@ -35,5 +35,16 @@ var_dump($user);
 echo '<br>';
 echo '<br>';
 
-echo $user->getAdmin();
+var_dump($user->getAdmin());
+echo 'assertData : ';
 echo $user->assertData();
+
+
+
+/*
+foreach ($insertValues as $value) {
+    $string .= $value;
+}*/
+echo '<br>';
+echo 'echo de $string : ' . '<br>';
+echo $result;
