@@ -21,6 +21,11 @@ class Agency extends Model
         return $this->name;
     }
 
+    public function setName(string $name): void
+    {
+        $this->name = $name;
+    }
+
     protected function getKeys(): array
     {
         return [

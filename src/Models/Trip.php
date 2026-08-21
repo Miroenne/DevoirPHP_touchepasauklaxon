@@ -72,6 +72,41 @@ class Trip extends Model
         return $this->arrivalAgencyId;
     }
 
+    public function setDepartureDateTime(\DateTimeImmutable $departureDateTime): void
+    {
+        $this->departureDateTime = $departureDateTime;
+    }
+
+    public function setArrivalDateTime(\DateTimeImmutable $arrivalDateTime): void
+    {
+        $this->arrivalDateTime = $arrivalDateTime;
+    }
+
+    public function setAvailablePlaces(int $availablePlaces): void
+    {
+        $this->availablePlaces = $availablePlaces;
+    }
+
+    public function setTotalPlaces(int $totalPlaces): void
+    {
+        $this->totalPlaces = $totalPlaces;
+    }
+
+    public function setAuthorId(int $authorId): void
+    {
+        $this->authorId = $authorId;
+    }
+
+    public function setDepartureAgnecyId(int $agencyId): void
+    {
+        $this->departureAgencyId = $agencyId;
+    }
+
+    public function setArrivalAgencyId(int $agencyId): void
+    {
+        $this->arrivalAgencyId = $agencyId;
+    }
+
     protected function getKeys(): array
     {
         return [

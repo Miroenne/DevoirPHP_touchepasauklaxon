@@ -73,6 +73,55 @@ class User extends Model
         return $this->mustChangePassword;
     }
 
+    public function setFirstName(string $firstName): void
+    {
+        if (trim($firstName) !== '') {
+            $this->firstName = $firstName;
+        }
+    }
+
+    public function setLastName(string $lastName): void
+    {
+        if (trim($lastName) !== '') {
+            $this->lastName = $lastName;
+        }
+    }
+
+    public function setEmail(string $email): void
+    {
+        if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $this->email = $email;
+        }
+    }
+
+    public function setPasswordHash(string $plainPassword): void
+    {
+        if (trim($plainPassword) !== '' && strlen($plainPassword) > 8) {
+            $this->passwordHash = password_hash($plainPassword, PASSWORD_BCRYPT);
+        }
+    }
+
+    public function setPhoneNumber(string $phoneNumber): void
+    {
+        if (trim($phoneNumber) !== '') {
+            $this->phoneNumber = $phoneNumber;
+        }
+    }
+
+    public function setAdmin(bool $admin): void
+    {
+        if (filter_var($admin, FILTER_VALIDATE_BOOL)) {
+            $this->admin = $admin;
+        }
+    }
+
+    public function setMustChangePassword(bool $mustChangePassword): void
+    {
+        if (filter_var($mustChangePassword, FILTER_VALIDATE_BOOL)) {
+            $this->mustChangePassword = $mustChangePassword;
+        }
+    }
+
     protected function getKeys(): array
     {
         return [
