@@ -10,47 +10,47 @@ use JsonSerializable;
 class User extends Model
 {
 
-    protected string $firstname;
-    protected string $lastname;
+    protected string $firstName;
+    protected string $lastName;
     protected string $email;
-    protected string $password_hash;
-    protected string $phone_number;
+    protected string $passwordHash;
+    protected string $phoneNumber;
     protected bool $admin;
-    protected bool $must_change_password;
+    protected bool $mustChangePassword;
 
     public function __construct(
-        string $firstname,
-        string $lastname,
+        string $firstName,
+        string $lastName,
         string $email,
-        string $password_hash,
-        string $phone_number,
+        string $passwordHash,
+        string $phoneNumber,
         bool $admin,
-        bool $must_change_password,
+        bool $mustChangePassword,
         ?int $id = null
     ) {
         parent::__construct($id);
-        $this->firstname = $firstname;
-        $this->lastname = $lastname;
+        $this->firstName = $firstName;
+        $this->lastName = $lastName;
         $this->email = $email;
-        $this->password_hash = $password_hash;
-        $this->phone_number = $phone_number;
+        $this->passwordHash = $passwordHash;
+        $this->phoneNumber = $phoneNumber;
         $this->admin = $admin;
-        $this->must_change_password = $must_change_password;
+        $this->mustChangePassword = $mustChangePassword;
     }
 
-    public function getFirstName(): string
+    public function getfirstName(): string
     {
-        return $this->firstname;
+        return $this->firstName;
     }
 
-    public function getLastName(): string
+    public function getlastName(): string
     {
-        return $this->lastname;
+        return $this->lastName;
     }
 
     public function getPhoneNumber(): string
     {
-        return $this->phone_number;
+        return $this->phoneNumber;
     }
 
     public function getEmail(): string
@@ -60,7 +60,7 @@ class User extends Model
 
     public function getPasswordHash(): string
     {
-        return $this->password_hash;
+        return $this->passwordHash;
     }
 
     public function getAdmin(): bool
@@ -70,20 +70,20 @@ class User extends Model
 
     public function getMustChangePassword()
     {
-        return $this->must_change_password;
+        return $this->mustChangePassword;
     }
 
-    protected static function getKeys(): array
+    protected function getKeys(): array
     {
         return [
             'id',
-            'firstname',
-            'lastname',
+            'firstName',
+            'lastName',
             'email',
-            'password_hash',
-            'phone_number',
+            'passwordHash',
+            'phoneNumber',
             'admin',
-            'must_change_password'
+            'mustChangePassword'
         ];
     }
 
@@ -91,8 +91,8 @@ class User extends Model
     {
         return [
             self::getId(),
-            self::getFirstName(),
-            self::getLastName(),
+            self::getfirstName(),
+            self::getlastName(),
             self::getEmail(),
             self::getPasswordHash(),
             self::getPhoneNumber(),
@@ -104,14 +104,15 @@ class User extends Model
     public static function toObject(array $data): static
     {
         return new static(
-            $data['firstname'],
-            $data['lastname'],
-            $data['email'],
-            $data['password_hash'],
-            $data['phone_number'],
-            $data['admin'],
-            $data['must_change_password'],
-            $data['id']
+            id: $data['id'],
+            firstName: $data['firstName'],
+            lastName: $data['lastName'],
+            email: $data['email'],
+            passwordHash: $data['passwordHash'],
+            phoneNumber: $data['phoneNumber'],
+            admin: $data['admin'],
+            mustChangePassword: $data['mustChangePassword']
+
         );
     }
 
@@ -123,11 +124,11 @@ class User extends Model
     public function assertData(): bool
     {
 
-        if (trim(self::getFirstName()) === '') {
+        if (trim(self::getfirstName()) === '') {
             return false;
         }
 
-        if (trim(self::getLastName()) === '') {
+        if (trim(self::getlastName()) === '') {
             return false;
         }
 

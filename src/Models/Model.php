@@ -15,7 +15,7 @@ abstract class Model
     }
 
     abstract public function assertData(): bool;
-    abstract protected static function getKeys(): array;
+    abstract protected function getKeys(): array;
     abstract protected function getValues(): array;
     abstract public static function toObject(array $data): static;
 
@@ -26,20 +26,6 @@ abstract class Model
         $values = static::getValues();
 
         return array_combine($keys, $values);
-    }
-
-    public function toClass(array $array): static
-    {
-        $string = [];
-
-        foreach ($array as $key => $value) {
-            $string[] = $key . ' : ' . match (true) {
-            };
-        }
-
-        $result = implode(', ', $string);
-
-        return new static($result);
     }
 
     public function getId(): ?int

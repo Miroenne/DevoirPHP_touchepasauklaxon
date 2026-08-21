@@ -40,11 +40,17 @@ echo 'assertData : ';
 echo $user->assertData();
 
 
+$utilisateur = [
+    'id' => 5,
+    'firstname' => 'John',
+    'lastname' => 'Doe',
+    'email' => 'jdoe@email.com',
+    'password_hash' => 'PasspasswordWord',
+    'phone_number' => '6346430',
+    'admin' => true,
+    'must_change_password' => false
+];
 
-/*
-foreach ($insertValues as $value) {
-    $string .= $value;
-}*/
-echo '<br>';
-echo 'echo de $string : ' . '<br>';
-echo $result;
+$newUser = User::toObject($utilisateur);
+
+var_dump($newUser);
