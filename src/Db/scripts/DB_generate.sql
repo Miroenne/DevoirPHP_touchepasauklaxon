@@ -8,20 +8,20 @@ SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
 
 -- -----------------------------------------------------
--- Schema mydb
+-- Schema TouchePasAuKlaxon_DB
 -- -----------------------------------------------------
-DROP SCHEMA IF EXISTS `mydb` ;
+DROP SCHEMA IF EXISTS `TouchePasAuKlaxon_DB` ;
 
 -- -----------------------------------------------------
--- Schema mydb
+-- Schema TouchePasAuKlaxon_DB
 -- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `mydb` DEFAULT CHARACTER SET utf8 ;
-USE `mydb` ;
+CREATE SCHEMA IF NOT EXISTS `TouchePasAuKlaxon_DB` DEFAULT CHARACTER SET utf8 ;
+USE `TouchePasAuKlaxon_DB` ;
 
 -- -----------------------------------------------------
--- Table `mydb`.`agencies`
+-- Table `TouchePasAuKlaxon_DB`.`agencies`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`agencies` (
+CREATE TABLE IF NOT EXISTS `TouchePasAuKlaxon_DB`.`agencies` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`id`),
@@ -30,9 +30,9 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`users`
+-- Table `TouchePasAuKlaxon_DB`.`users`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`users` (
+CREATE TABLE IF NOT EXISTS `TouchePasAuKlaxon_DB`.`users` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `firstName` VARCHAR(45) NOT NULL,
   `lastName` VARCHAR(45) NOT NULL,
@@ -40,7 +40,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`users` (
   `email` VARCHAR(45) NOT NULL,
   `password_hash` VARCHAR(255) NOT NULL DEFAULT 'mDp1234',
   `admin` TINYINT NOT NULL DEFAULT 0,
-  `must_change_password` TINYINT NOT NULL DEFAULT 0,
+  `must_change_password` TINYINT NOT NULL DEFAULT 1,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `phoneNumber_UNIQUE` (`phoneNumber` ASC) VISIBLE,
   UNIQUE INDEX `email_UNIQUE` (`email` ASC) VISIBLE)
@@ -48,9 +48,9 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`trips`
+-- Table `TouchePasAuKlaxon_DB`.`trips`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`trips` (
+CREATE TABLE IF NOT EXISTS `TouchePasAuKlaxon_DB`.`trips` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `departureDateTime` DATETIME NOT NULL,
   `arrivalDateTime` DATETIME NOT NULL,
@@ -65,17 +65,17 @@ CREATE TABLE IF NOT EXISTS `mydb`.`trips` (
   INDEX `fk_trips_authorId_idx` (`authorId` ASC) VISIBLE,
   CONSTRAINT `fk_trips_departureAgencyId`
     FOREIGN KEY (`departureAgencyId`)
-    REFERENCES `mydb`.`agencies` (`id`)
+    REFERENCES `TouchePasAuKlaxon_DB`.`agencies` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_trips_arrivalAgencyId`
     FOREIGN KEY (`arrivalAgencyId`)
-    REFERENCES `mydb`.`agencies` (`id`)
+    REFERENCES `TouchePasAuKlaxon_DB`.`agencies` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_trips_authorId`
     FOREIGN KEY (`authorId`)
-    REFERENCES `mydb`.`users` (`id`)
+    REFERENCES `TouchePasAuKlaxon_DB`.`users` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;

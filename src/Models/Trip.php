@@ -2,11 +2,9 @@
 
 namespace App\Models;
 
-require __DIR__ . ('/Model.php');
-
+use App\Models\Model;
 use DateTimeImmutable;
 use JsonSerializable;
-use Override;
 
 class Trip extends Model
 {
@@ -84,27 +82,37 @@ class Trip extends Model
 
     public function setAvailablePlaces(int $availablePlaces): void
     {
-        $this->availablePlaces = $availablePlaces;
+        if ($availablePlaces >= 0) {
+            $this->availablePlaces = $availablePlaces;
+        }
     }
 
     public function setTotalPlaces(int $totalPlaces): void
     {
-        $this->totalPlaces = $totalPlaces;
+        if ($totalPlaces >= 0) {
+            $this->totalPlaces = $totalPlaces;
+        }
     }
 
     public function setAuthorId(int $authorId): void
     {
-        $this->authorId = $authorId;
+        if ($authorId > 0) {
+            $this->authorId = $authorId;
+        }
     }
 
     public function setDepartureAgnecyId(int $agencyId): void
     {
-        $this->departureAgencyId = $agencyId;
+        if ($agencyId > 0) {
+            $this->departureAgencyId = $agencyId;
+        }
     }
 
     public function setArrivalAgencyId(int $agencyId): void
     {
-        $this->arrivalAgencyId = $agencyId;
+        if ($agencyId > 0) {
+            $this->arrivalAgencyId = $agencyId;
+        }
     }
 
     protected function getKeys(): array
@@ -191,6 +199,11 @@ class Trip extends Model
     public function assertAgencies(): bool
     {
         return self::getDepartureAgencyId() !== self::getArrivalAgencyId() ? true : false;
+    }
+
+    public function assertDateTime(\DateTimeImmutable $departure, \DateTimeImmutable $arrival)
+    {
+        return $departure < $arrival ? true : false;
     }
 
     public function assertAuthor(int $author, bool $admin): bool

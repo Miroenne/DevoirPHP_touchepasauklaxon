@@ -2,8 +2,7 @@
 
 namespace App\Models;
 
-require __DIR__ . ('/Model.php');
-
+use App\Models\Model;
 use JsonSerializable;
 
 class Agency extends Model
@@ -23,6 +22,7 @@ class Agency extends Model
 
     public function setName(string $name): void
     {
+        if (trim($name) !== '');
         $this->name = $name;
     }
 

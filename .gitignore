@@ -3,5 +3,6 @@
 ._*
 .DS_Store
 /vendor/
-
+test.php
+env/
 

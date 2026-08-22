@@ -13,15 +13,12 @@ class Connect
 
         $urlPath = $_SERVER['HTTP_HOST'];
 
-        /*
-        if(str_contains($urlPath, 'localhost')){
+
+        if (str_contains($urlPath, 'localhost')) {
             $config = parse_ini_file(__DIR__ . '/../env/.env.dev');
-        }else {
+        } else {
             $config = parse_ini_file(__DIR__ . '/../env/.env');
-        }*/
-
-        $config = parse_ini_file(__DIR__ . '/../env/.env');
-
+        }
 
         $host = $config['DB_ADDRESS'] ?? '';
         $port = $config['DB_PORT'] ?? '';

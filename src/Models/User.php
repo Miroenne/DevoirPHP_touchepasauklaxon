@@ -2,9 +2,7 @@
 
 namespace App\Models;
 
-require __DIR__ . ('/Model.php');
-
-
+use App\Models\Model;
 use JsonSerializable;
 
 class User extends Model
