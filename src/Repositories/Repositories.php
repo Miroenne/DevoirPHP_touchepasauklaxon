@@ -16,4 +16,9 @@ abstract class Repository
 
     abstract protected static function getTable(): string;
     abstract protected static function getModel(): string;
+
+    public function create(): bool{
+        if()
+    }
+
 }
