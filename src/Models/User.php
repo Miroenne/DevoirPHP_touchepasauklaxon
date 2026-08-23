@@ -120,7 +120,7 @@ class User extends Model
         }
     }
 
-    protected function getKeys(): array
+    public function getKeys(): array
     {
         return [
             'id',
@@ -134,7 +134,7 @@ class User extends Model
         ];
     }
 
-    protected function getValues(): array
+    public function getValues(): array
     {
         return [
             self::getId(),
