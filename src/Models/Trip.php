@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Model;
+use DateTime;
 use DateTimeImmutable;
 use JsonSerializable;
 
@@ -31,6 +32,7 @@ class Trip extends Model
         $this->arrivalDateTime = $arrivalDateTime;
         $this->availablePlaces = $availablePlaces;
         $this->totalPlaces = $totalPlaces;
+        $this->authorId = $authorId;
         $this->departureAgencyId = $departureAgencyId;
         $this->arrivalAgencyId = $arrivalAgencyId;
     }
@@ -115,7 +117,7 @@ class Trip extends Model
         }
     }
 
-    protected function getKeys(): array
+    public function getKeys(): array
     {
         return [
             'id',
@@ -129,12 +131,12 @@ class Trip extends Model
         ];
     }
 
-    protected function getValues(): array
+    public function getValues(): array
     {
         return [
             self::getId(),
-            self::getDepartureDateTime(),
-            self::getArrivalDateTime(),
+            self::getDepartureDateTime()->format('Y-m-d H:i:s'),
+            self::getArrivalDateTime()->format('Y-m-d H:i:s'),
             self::getAvailablePlaces(),
             self::getTotalPlaces(),
             self::getAuthorId(),
@@ -147,8 +149,8 @@ class Trip extends Model
     {
         return new static(
             id: $data['id'],
-            departureDateTime: $data['departureDateTime'],
-            arrivalDateTime: $data['arrvialDateTime'],
+            departureDateTime: new DateTimeImmutable($data['departureDateTime']),
+            arrivalDateTime: new DateTimeImmutable($data['arrivalDateTime']),
             availablePlaces: $data['availablePlaces'],
             totalPlaces: $data['totalPlaces'],
             authorId: $data['authorId'],

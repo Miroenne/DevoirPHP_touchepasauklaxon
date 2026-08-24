@@ -16,4 +16,15 @@ class UserRepository extends Repository
     {
         return User::class;
     }
+
+    public function findByEmail(string $email): ?object
+    {
+
+        $stmt = $this->pdo->prepare("SELECT * FROM {$this->getTable()} WHERE email = :email");
+        $stmt->execute(['email' => $email]);
+
+        $row = $stmt->fetch();
+
+        return $row ? ($this->getModel()::toObject($row)) : null;
+    }
 }

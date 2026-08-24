@@ -66,7 +66,7 @@ class User extends Model
         return $this->admin;
     }
 
-    public function getMustChangePassword()
+    public function getMustChangePassword(): bool
     {
         return $this->mustChangePassword;
     }
@@ -143,8 +143,8 @@ class User extends Model
             self::getEmail(),
             self::getPasswordHash(),
             self::getPhoneNumber(),
-            self::getAdmin(),
-            self::getMustChangePassword()
+            (int) self::getAdmin(),
+            (int) self::getMustChangePassword()
         ];
     }
 

@@ -22,8 +22,6 @@ abstract class Repository
         $data = $o->toArray();
         $cols = $o->getKeys();
 
-        var_dump($data);
-
         $sql = sprintf(
             'INSERT INTO %s (%s) VALUES (%s)',
             $this->getTable(),
@@ -31,11 +29,51 @@ abstract class Repository
             implode(', ', array_map(fn($c) => ":$c", $cols))
         );
 
-        $result = $this->pdo->prepare($sql)->execute($data);
+        $stmt = $this->pdo->prepare($sql);
+        $result = $stmt->execute($data);
+
         if ($result) {
             echo $this->pdo->lastInsertId();
         }
 
         return $result;
+    }
+
+    public function findById(int $id): ?object
+    {
+        $stmt = $this->pdo->prepare("SELECT * FROM {$this->getTable()} WHERE id = :id");
+        $stmt->execute(['id' => $id]);
+
+        $row = $stmt->fetch();
+
+        return $row ? ($this->getModel()::toObject($row)) : null;
+    }
+
+    public function findAll(): array
+    {
+        $stmt = $this->pdo->query("SELECT * FROM {$this->getTable()}");
+        $rows = $stmt->fetchAll();
+
+        return array_map(fn($r) => ($this->getModel()::toObject($r)), $rows);
+    }
+
+    public function update(object $o): bool
+    {
+        $data = $o->toArray();
+        $sets = implode(', ', array_map(fn($c) => "$c = :$c", $o->getKeys()));
+
+        $id = $o->getId();
+        echo $id;
+
+        $stmt = $this->pdo->prepare("UPDATE {$this->getTable()} SET $sets WHERE id = :id");
+
+        return $stmt->execute([...$data, 'id' => $o->getId()]);
+    }
+
+    public function delete(int $id): bool
+    {
+        $stmt = $this->pdo->prepare("DELETE FROM {$this->getTable()} WHERE id = :id");
+
+        return $stmt->execute(['id' => $id]);
     }
 }
