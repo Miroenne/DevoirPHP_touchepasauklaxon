@@ -127,10 +127,10 @@ class User extends Model
             'firstName',
             'lastName',
             'email',
-            'passwordHash',
+            'password_hash',
             'phoneNumber',
             'admin',
-            'mustChangePassword'
+            'must_change_password'
         ];
     }
 
@@ -155,10 +155,10 @@ class User extends Model
             firstName: $data['firstName'],
             lastName: $data['lastName'],
             email: $data['email'],
-            passwordHash: $data['passwordHash'],
+            passwordHash: $data['password_hash'],
             phoneNumber: $data['phoneNumber'],
             admin: $data['admin'],
-            mustChangePassword: $data['mustChangePassword']
+            mustChangePassword: $data['must_change_password']
 
         );
     }

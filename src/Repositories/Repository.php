@@ -62,18 +62,18 @@ abstract class Repository
         $data = $o->toArray();
         $sets = implode(', ', array_map(fn($c) => "$c = :$c", $o->getKeys()));
 
-        $id = $o->getId();
-        echo $id;
-
         $stmt = $this->pdo->prepare("UPDATE {$this->getTable()} SET $sets WHERE id = :id");
 
-        return $stmt->execute([...$data, 'id' => $o->getId()]);
+        $stmt->execute([...$data, 'id' => $o->getId()]);
+
+        return $stmt->rowCount() > 0;
     }
 
     public function delete(int $id): bool
     {
         $stmt = $this->pdo->prepare("DELETE FROM {$this->getTable()} WHERE id = :id");
 
-        return $stmt->execute(['id' => $id]);
+        $stmt->execute(['id' => $id]);
+        return $stmt->rowCount() > 0;
     }
 }

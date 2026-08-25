@@ -1,8 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
 use App\Models\Model;
+use BcMath\Number;
 use JsonSerializable;
 
 class Agency extends Model
@@ -52,6 +55,7 @@ class Agency extends Model
 
     public function assertData(): bool
     {
+
         if (trim(self::getName()) === '') {
             return false;
         }
