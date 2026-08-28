@@ -41,7 +41,7 @@ INSERT INTO `agencies` (`id`, `name`) VALUES
 -- Déchargement des données de la table `users`
 --
 
-INSERT INTO `users` (`id`, `firstName`, `lastName`, `phoneNumber`, `email`) VALUES
+INSERT INTO `users` (`id`, `first_name`, `last_name`, `phone_number`, `email`) VALUES
 (1, 'Alexandre', 'Martin', '0612345678', 'alexandre.martin@email.fr'),
 (2, 'Sophie', 'Dubois', '0698765432', 'sophie.dubois@email.fr'),
 (3, 'Julien', 'Bernard', '0622446688', 'julien.bernard@email.fr'),
@@ -63,6 +63,18 @@ INSERT INTO `users` (`id`, `firstName`, `lastName`, `phoneNumber`, `email`) VALU
 (19, 'Julie', 'Masson', '0733445566', 'julie.masson@email.fr'),
 (20, 'Arthur', 'Henry', '0666554433', 'arthur.henry@email.fr');
 
-UPDATE `users` SET `admin` = 1 WHERE `id` = 1;
+UPDATE `users` SET `is_admin` = 1 WHERE `id` = 1;
+
+-- --------------------------------------------------------
+
+--
+-- Déchargement des données de la table `trips`
+--
+
+INSERT INTO `trips` (`id`, `departure_at`, `arrival_at`, `total_places`, `available_places`, `author_id`, `from_agency_id`, `to_agency_id`) VALUES
+(1, '2026-09-05 08:00:00', '2026-09-05 15:00:00', 5, 2, 1, 5, 4),
+(2, '2026-09-05 08:00:00', '2026-09-05 15:00:00', 5, 4, 7, 4, 5),
+(3, '2026-08-05 08:00:00', '2026-08-06 15:00:00', 5, 4, 10, 1, 5),
+(4, '2026-10-31 09:00:00', '2026-10-31 14:00:00', 5, 0, 5, 5, 8);
 
 COMMIT;

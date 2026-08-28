@@ -26,7 +26,7 @@ class TripRepository extends Repository
         $date = new DateTimeImmutable('now', new DateTimeZone('Europe/Paris'));
         $date = $date->format('Y-m-d H:i:s');
         $stmt = $this->pdo->prepare("SELECT * FROM {$this->getTable()} WHERE 
-        departureDateTime > :date AND availablePlaces > 0");
+        departure_at > :date AND available_places > 0");
         $stmt->execute(['date' => $date]);
 
         $rows = $stmt->fetchAll();

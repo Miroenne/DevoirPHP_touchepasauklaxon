@@ -7,44 +7,44 @@ use DateTime;
 use DateTimeImmutable;
 use JsonSerializable;
 
-class Trip extends Model
+class Trip extends Model implements JsonSerializable
 {
-    protected DateTimeImmutable $departureDateTime;
-    protected DateTimeImmutable $arrivalDateTime;
+    protected DateTimeImmutable $departureAt;
+    protected DateTimeImmutable $arrivalAt;
     protected int $availablePlaces;
     protected int $totalPlaces;
     protected int $authorId;
-    protected int $departureAgencyId;
-    protected int $arrivalAgencyId;
+    protected int $fromAgencyId;
+    protected int $toAgencyId;
 
     public function __construct(
-        DateTimeImmutable $departureDateTime,
-        DateTimeImmutable $arrivalDateTime,
+        DateTimeImmutable $departureAt,
+        DateTimeImmutable $arrivalAt,
         int $availablePlaces,
         int $totalPlaces,
         int $authorId,
-        int $departureAgencyId,
-        int $arrivalAgencyId,
+        int $fromAgencyId,
+        int $toAgencyId,
         ?int $id = null
     ) {
         parent::__construct($id);
-        $this->departureDateTime = $departureDateTime;
-        $this->arrivalDateTime = $arrivalDateTime;
+        $this->departureAt = $departureAt;
+        $this->arrivalAt = $arrivalAt;
         $this->availablePlaces = $availablePlaces;
         $this->totalPlaces = $totalPlaces;
         $this->authorId = $authorId;
-        $this->departureAgencyId = $departureAgencyId;
-        $this->arrivalAgencyId = $arrivalAgencyId;
+        $this->fromAgencyId = $fromAgencyId;
+        $this->toAgencyId = $toAgencyId;
     }
 
-    public function getDepartureDateTime(): \DateTimeImmutable
+    public function getDepartureAt(): \DateTimeImmutable
     {
-        return $this->departureDateTime;
+        return $this->departureAt;
     }
 
-    public function getArrivalDateTime(): \DateTimeImmutable
+    public function getArrivalAt(): \DateTimeImmutable
     {
-        return $this->arrivalDateTime;
+        return $this->arrivalAt;
     }
 
     public function getAvailablePlaces(): int
@@ -62,58 +62,58 @@ class Trip extends Model
         return $this->authorId;
     }
 
-    public function getDepartureAgencyId(): int
+    public function getFromAgencyId(): int
     {
-        return $this->departureAgencyId;
+        return $this->fromAgencyId;
     }
 
-    public function getArrivalAgencyId(): int
+    public function getToAgencyId(): int
     {
-        return $this->arrivalAgencyId;
+        return $this->toAgencyId;
     }
 
-    public function setDepartureDateTime(\DateTimeImmutable $departureDateTime): void
+    public function setDepartureAt(\DateTimeImmutable $departureAt): void
     {
-        $this->departureDateTime = $departureDateTime;
+        $this->departureAt = $departureAt;
     }
 
-    public function setArrivalDateTime(\DateTimeImmutable $arrivalDateTime): void
+    public function setArrivalAt(\DateTimeImmutable $arrivalAt): void
     {
-        $this->arrivalDateTime = $arrivalDateTime;
+        $this->arrivalAt = $arrivalAt;
     }
 
     public function setAvailablePlaces(int $availablePlaces): void
     {
-        if ($availablePlaces >= 0) {
+        if ($availablePlaces >= 0 && filter_var($availablePlaces, FILTER_VALIDATE_INT)) {
             $this->availablePlaces = $availablePlaces;
         }
     }
 
     public function setTotalPlaces(int $totalPlaces): void
     {
-        if ($totalPlaces >= 0) {
+        if ($totalPlaces >= 0 && filter_var($totalPlaces, FILTER_VALIDATE_INT)) {
             $this->totalPlaces = $totalPlaces;
         }
     }
 
     public function setAuthorId(int $authorId): void
     {
-        if ($authorId > 0) {
+        if ($authorId > 0 && filter_var($authorId, FILTER_VALIDATE_INT)) {
             $this->authorId = $authorId;
         }
     }
 
-    public function setDepartureAgnecyId(int $agencyId): void
+    public function setFromAgencyId(int $agencyId): void
     {
-        if ($agencyId > 0) {
-            $this->departureAgencyId = $agencyId;
+        if ($agencyId > 0 && filter_var($agencyId, FILTER_VALIDATE_INT)) {
+            $this->fromAgencyId = $agencyId;
         }
     }
 
-    public function setArrivalAgencyId(int $agencyId): void
+    public function setToAgencyId(int $agencyId): void
     {
-        if ($agencyId > 0) {
-            $this->arrivalAgencyId = $agencyId;
+        if ($agencyId > 0 && filter_var($agencyId, FILTER_VALIDATE_INT)) {
+            $this->toAgencyId = $agencyId;
         }
     }
 
@@ -121,13 +121,13 @@ class Trip extends Model
     {
         return [
             'id',
-            'departureDateTime',
-            'arrivalDateTime',
-            'availablePlaces',
-            'totalPlaces',
-            'authorId',
-            'departureAgencyId',
-            'arrivalAgencyId'
+            'departure_at',
+            'arrival_at',
+            'available_places',
+            'total_places',
+            'author_id',
+            'from_agency_id',
+            'to_agency_id'
         ];
     }
 
@@ -135,13 +135,13 @@ class Trip extends Model
     {
         return [
             self::getId(),
-            self::getDepartureDateTime()->format('Y-m-d H:i:s'),
-            self::getArrivalDateTime()->format('Y-m-d H:i:s'),
+            self::getDepartureAt()->format('Y-m-d H:i:s'),
+            self::getArrivalAt()->format('Y-m-d H:i:s'),
             self::getAvailablePlaces(),
             self::getTotalPlaces(),
             self::getAuthorId(),
-            self::getDepartureAgencyId(),
-            self::getArrivalAgencyId(),
+            self::getFromAgencyId(),
+            self::getToAgencyId(),
         ];
     }
 
@@ -149,24 +149,24 @@ class Trip extends Model
     {
         return new static(
             id: $data['id'],
-            departureDateTime: new DateTimeImmutable($data['departureDateTime']),
-            arrivalDateTime: new DateTimeImmutable($data['arrivalDateTime']),
-            availablePlaces: $data['availablePlaces'],
-            totalPlaces: $data['totalPlaces'],
-            authorId: $data['authorId'],
-            departureAgencyId: $data['departureAgencyId'],
-            arrivalAgencyId: $data['arrivalAgencyId']
+            departureAt: new DateTimeImmutable($data['departure_at']),
+            arrivalAt: new DateTimeImmutable($data['arrival_at']),
+            availablePlaces: $data['available_places'],
+            totalPlaces: $data['total_places'],
+            authorId: $data['author_id'],
+            fromAgencyId: $data['from_agency_id'],
+            toAgencyId: $data['to_agency_id']
         );
     }
 
     public function assertData(): bool
     {
 
-        if (!self::getDepartureDateTime() instanceof DateTimeImmutable) {
+        if (!self::getDepartureAt() instanceof DateTimeImmutable) {
             return false;
         }
 
-        if (!self::getArrivalDateTime() instanceof DateTimeImmutable) {
+        if (!self::getArrivalAt() instanceof DateTimeImmutable) {
             return false;
         }
 
@@ -182,11 +182,11 @@ class Trip extends Model
             return false;
         }
 
-        if (self::getDepartureAgencyId() < 0) {
+        if (self::getFromAgencyId() < 0) {
             return false;
         }
 
-        if (self::getArrivalAgencyId() < 0) {
+        if (self::getToAgencyId() < 0) {
             return false;
         }
 
@@ -200,7 +200,7 @@ class Trip extends Model
 
     public function assertAgencies(): bool
     {
-        return self::getDepartureAgencyId() !== self::getArrivalAgencyId() ? true : false;
+        return self::getFromAgencyId() !== self::getToAgencyId() ? true : false;
     }
 
     public function assertDateTime(\DateTimeImmutable $departure, \DateTimeImmutable $arrival)
@@ -214,5 +214,19 @@ class Trip extends Model
             return false;
         }
         return true;
+    }
+
+    public function jsonSerialize(): array
+    {
+        return [
+            'id' => $this->getId(),
+            'departureAt' => $this->getDepartureAt()->format('Y-m-d H:i:s'),
+            'arrivalAt' => $this->getArrivalAt()->format('Y-m-d H:i:s'),
+            'availablePlaces' => $this->getAvailablePlaces(),
+            'totalPlaces' => $this->getTotalPlaces(),
+            'authorId' => $this->getAuthorId(),
+            'fromAgencyId' => $this->getFromAgencyId(),
+            'toAgencyId' => $this->getToAgencyId()
+        ];
     }
 }

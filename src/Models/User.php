@@ -5,7 +5,7 @@ namespace App\Models;
 use App\Models\Model;
 use JsonSerializable;
 
-class User extends Model
+class User extends Model implements JsonSerializable
 {
 
     protected string $firstName;
@@ -13,7 +13,7 @@ class User extends Model
     protected string $email;
     protected string $passwordHash;
     protected string $phoneNumber;
-    protected bool $admin;
+    protected bool $isAdmin;
     protected bool $mustChangePassword;
 
     public function __construct(
@@ -22,7 +22,7 @@ class User extends Model
         string $email,
         string $passwordHash,
         string $phoneNumber,
-        bool $admin,
+        bool $isAdmin,
         bool $mustChangePassword,
         ?int $id = null
     ) {
@@ -32,7 +32,7 @@ class User extends Model
         $this->email = $email;
         $this->passwordHash = $passwordHash;
         $this->phoneNumber = $phoneNumber;
-        $this->admin = $admin;
+        $this->isAdmin = $isAdmin;
         $this->mustChangePassword = $mustChangePassword;
     }
 
@@ -61,9 +61,9 @@ class User extends Model
         return $this->passwordHash;
     }
 
-    public function getAdmin(): bool
+    public function getIsAdmin(): bool
     {
-        return $this->admin;
+        return $this->isAdmin;
     }
 
     public function getMustChangePassword(): bool
@@ -106,10 +106,10 @@ class User extends Model
         }
     }
 
-    public function setAdmin(bool $admin): void
+    public function setIsAdmin(bool $isAdmin): void
     {
-        if (filter_var($admin, FILTER_VALIDATE_BOOL)) {
-            $this->admin = $admin;
+        if (filter_var($isAdmin, FILTER_VALIDATE_BOOL)) {
+            $this->isAdmin = $isAdmin;
         }
     }
 
@@ -124,13 +124,13 @@ class User extends Model
     {
         return [
             'id',
-            'firstName',
-            'lastName',
+            'first_name',
+            'last_name',
+            'phone_number',
             'email',
             'password_hash',
-            'phoneNumber',
-            'admin',
-            'must_change_password'
+            'must_change_password',
+            'is_admin',
         ];
     }
 
@@ -143,7 +143,7 @@ class User extends Model
             self::getEmail(),
             self::getPasswordHash(),
             self::getPhoneNumber(),
-            (int) self::getAdmin(),
+            (int) self::getIsAdmin(),
             (int) self::getMustChangePassword()
         ];
     }
@@ -152,12 +152,12 @@ class User extends Model
     {
         return new static(
             id: $data['id'],
-            firstName: $data['firstName'],
-            lastName: $data['lastName'],
+            firstName: $data['first_name'],
+            lastName: $data['last_name'],
             email: $data['email'],
             passwordHash: $data['password_hash'],
-            phoneNumber: $data['phoneNumber'],
-            admin: $data['admin'],
+            phoneNumber: $data['phone_number'],
+            isAdmin: $data['is_admin'],
             mustChangePassword: $data['must_change_password']
 
         );
@@ -192,5 +192,18 @@ class User extends Model
         }
 
         return true;
+    }
+
+    public function jsonSerialize(): array
+    {
+        return [
+            'id' => $this->getId(),
+            'firstName' => $this->getfirstName(),
+            'lastName' => $this->getlastName(),
+            'email' => $this->getEmail(),
+            'phoneNumber' => $this->getPhoneNumber(),
+            'isAdmin' => $this->getIsAdmin(),
+            'mustChangePassword' => $this->getMustChangePassword()
+        ];
     }
 }

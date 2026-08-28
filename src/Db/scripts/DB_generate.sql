@@ -34,15 +34,15 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `TouchePasAuKlaxon_DB`.`users` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `firstName` VARCHAR(45) NOT NULL,
-  `lastName` VARCHAR(45) NOT NULL,
-  `phoneNumber` VARCHAR(45) NOT NULL,
+  `first_name` VARCHAR(45) NOT NULL,
+  `last_name` VARCHAR(45) NOT NULL,
+  `phone_number` VARCHAR(45) NOT NULL,
   `email` VARCHAR(45) NOT NULL,
   `password_hash` VARCHAR(255) NOT NULL DEFAULT 'mDp1234',
-  `admin` TINYINT NOT NULL DEFAULT 0,
-  `must_change_password` TINYINT NOT NULL DEFAULT 1,
+  `must_change_password` TINYINT NOT NULL DEFAULT 0,
+  `is_admin` TINYINT NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`),
-  UNIQUE INDEX `phoneNumber_UNIQUE` (`phoneNumber` ASC) VISIBLE,
+  UNIQUE INDEX `phoneNumber_UNIQUE` (`phone_number` ASC) VISIBLE,
   UNIQUE INDEX `email_UNIQUE` (`email` ASC) VISIBLE)
 ENGINE = InnoDB;
 
@@ -52,29 +52,27 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `TouchePasAuKlaxon_DB`.`trips` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `departureDateTime` DATETIME NOT NULL,
-  `arrivalDateTime` DATETIME NOT NULL,
-  `totalPlaces` INT NOT NULL,
-  `availablePlaces` INT NOT NULL,
-  `authorId` INT NOT NULL,
-  `departureAgencyId` INT NOT NULL,
-  `arrivalAgencyId` INT NOT NULL,
-  PRIMARY KEY (`id`, `authorId`, `departureAgencyId`, `arrivalAgencyId`),
-  INDEX `fk_trips_departureAgencyId_idx` (`departureAgencyId` ASC) VISIBLE,
-  INDEX `fk_trips_arrivalAgencyId_idx` (`arrivalAgencyId` ASC) VISIBLE,
-  INDEX `fk_trips_authorId_idx` (`authorId` ASC) VISIBLE,
-  CONSTRAINT `fk_trips_departureAgencyId`
-    FOREIGN KEY (`departureAgencyId`)
+  `departure_at` DATETIME NOT NULL,
+  `arrival_at` DATETIME NOT NULL,
+  `available_places` INT NOT NULL,
+  `total_places` INT NOT NULL,
+  `author_id` INT NOT NULL,
+  `from_agency_id` INT NOT NULL,
+  `to_agency_id` INT NOT NULL,
+  PRIMARY KEY (`id`, `author_id`, `from_agency_id`, `to_agency_id`),
+  INDEX `fk_trips_agencies_idx` (`from_agency_id` ASC) VISIBLE,
+  INDEX `fk_trips_agencies1_idx` (`to_agency_id` ASC) VISIBLE,
+  INDEX `fk_trips_users1_idx` (`author_id` ASC) VISIBLE,
+  CONSTRAINT `fk_trips_agencies`
+    FOREIGN KEY (`from_agency_id`)
     REFERENCES `TouchePasAuKlaxon_DB`.`agencies` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_trips_arrivalAgencyId`
-    FOREIGN KEY (`arrivalAgencyId`)
+    ON DELETE NO ACTION,
+  CONSTRAINT `fk_trips_agencies1`
+    FOREIGN KEY (`to_agency_id`)
     REFERENCES `TouchePasAuKlaxon_DB`.`agencies` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_trips_authorId`
-    FOREIGN KEY (`authorId`)
+    ON DELETE NO ACTION,
+  CONSTRAINT `fk_trips_users1`
+    FOREIGN KEY (`author_id`)
     REFERENCES `TouchePasAuKlaxon_DB`.`users` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)

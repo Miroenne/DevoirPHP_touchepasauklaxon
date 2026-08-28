@@ -7,8 +7,9 @@ namespace App\Models;
 use App\Models\Model;
 use BcMath\Number;
 use JsonSerializable;
+use Override;
 
-class Agency extends Model
+class Agency extends Model implements JsonSerializable
 {
     protected string $name;
 
@@ -60,5 +61,13 @@ class Agency extends Model
             return false;
         }
         return true;
+    }
+
+    public function jsonSerialize(): array
+    {
+        return [
+            'id' => $this->getId(),
+            'name' => $this->getName()
+        ];
     }
 }
