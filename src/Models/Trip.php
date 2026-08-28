@@ -229,4 +229,18 @@ class Trip extends Model implements JsonSerializable
             'toAgencyId' => $this->getToAgencyId()
         ];
     }
+
+    public function display(): void
+    {
+
+        echo 'Date de départ : ' . $this->getDepartureAt()->format('d/m/Y') .
+            ' à : ' . $this->getDepartureAt()->format("H:i") . ',<br>';
+        echo "De l'agence : " . $this->getFromAgencyId() . '.<br>';
+        echo "Date d'arrivée : " . $this->getArrivalAt()->format('d/m/Y') .
+            ' à : ' . $this->getArrivalAt()->format('H:i') . ',<br>';
+        echo "À l'agence : " . $this->getToAgencyId() . '.<br>';
+        echo 'Sur un total de : ' . $this->getTotalPlaces() . ' places (dont le conducteur), il reste : ' .
+            $this->getAvailablePlaces() . ' places. <br>';
+        echo 'Personne à contacter : ' . $this->getAuthorId() . '<br><br>';
+    }
 }

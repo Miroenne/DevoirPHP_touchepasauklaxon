@@ -71,8 +71,8 @@ class Agency extends Model implements JsonSerializable
         ];
     }
 
-    public function display(): string
+    public function display(): void
     {
-        return 'Agence de : ' . $this->getName() . ', ID : ' . $this->getId() . '<br><br>';
+        echo 'Agence de : ' . $this->getName() . ', ID : ' . $this->getId() . '<br><br>';
     }
 }

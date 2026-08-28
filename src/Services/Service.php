@@ -27,16 +27,19 @@ abstract class Service
 
     abstract protected function getRepository(): object;
 
-    public function createService(object $o, int $userId): bool
+    public function createService(object $o, ?int $userId = null): bool
     {
-
-        $user = $this->userRepository->findById($userId);
-
-        if ($user === null) {
-            throw new RessourceNotFoundException();
-        }
-
         if ($o instanceof User || $o instanceof Agency) {
+            if (!isset($userid)) {
+                throw new UnthorizedException('User Id is required');
+            }
+            $user = $this->userRepository->findById($userId);
+
+            if ($user === null) {
+                throw new RessourceNotFoundException();
+            }
+
+
             if ($user->getIsAdmin() === false) {
                 throw new ForbiddenException('Only an admin can create this type of entity');
             }
@@ -51,8 +54,19 @@ abstract class Service
         return $newEntry ? $newEntry : throw new RuntimeException('Entry cannot been created');
     }
 
-    public function findAllService(): array
+    public function findAllService(?int $id = null): array
     {
+        if ($this instanceof User) {
+            if (!isset($id)) {
+                throw new UnthorizedException('User Id is required');
+            }
+            $user = $this->userRepository->findById($id);
+
+            if ($user->getIsAdmin() === false) {
+                throw new ForbiddenException('Only an Admin can access to all the users list');
+            }
+        }
+
 
         $entities = $this->repository->findAll();
 
@@ -113,7 +127,15 @@ abstract class Service
 
         if ($entity instanceof User || $entity instanceof Agency) {
             if ($user->getIsAdmin() === false) {
-                throw new ForbiddenException('Only an admin can create this type of entity');
+                throw new ForbiddenException('Only an admin can delete this type of entity');
+            }
+        }
+
+
+
+        if ($entity instanceof Trip && $user->getId() !== $entity->getAuthorId()) {
+            if ($user->getIsAdmin() === false) {
+                throw new ForbiddenException('Only the author of this trip or an admin can delete it');
             }
         }
 

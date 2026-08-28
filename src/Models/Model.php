@@ -18,6 +18,7 @@ abstract class Model
     abstract protected function getKeys(): array;
     abstract protected function getValues(): array;
     abstract public static function toObject(array $data): static;
+    abstract public function display(): void;
 
     public function toArray(): array
     {

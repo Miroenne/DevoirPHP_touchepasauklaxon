@@ -39,7 +39,7 @@ CREATE TABLE IF NOT EXISTS `TouchePasAuKlaxon_DB`.`users` (
   `phone_number` VARCHAR(45) NOT NULL,
   `email` VARCHAR(45) NOT NULL,
   `password_hash` VARCHAR(255) NOT NULL DEFAULT 'mDp1234',
-  `must_change_password` TINYINT NOT NULL DEFAULT 0,
+  `must_change_password` TINYINT NOT NULL DEFAULT 1,
   `is_admin` TINYINT NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `phoneNumber_UNIQUE` (`phone_number` ASC) VISIBLE,

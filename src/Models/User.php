@@ -16,16 +16,19 @@ class User extends Model implements JsonSerializable
     protected bool $isAdmin;
     protected bool $mustChangePassword;
 
+
+
     public function __construct(
         string $firstName,
         string $lastName,
         string $email,
-        string $passwordHash,
         string $phoneNumber,
+        string $passwordHash,
         bool $isAdmin,
         bool $mustChangePassword,
         ?int $id = null
     ) {
+
         parent::__construct($id);
         $this->firstName = $firstName;
         $this->lastName = $lastName;
@@ -205,5 +208,25 @@ class User extends Model implements JsonSerializable
             'isAdmin' => $this->getIsAdmin(),
             'mustChangePassword' => $this->getMustChangePassword()
         ];
+    }
+
+    public function display(): void
+    {
+        echo 'Nom : ' . $this->getlastName() . ' Prénom : ' . $this->firstName . '<br>';
+        echo 'Email : ' . $this->getEmail() . '<br>';
+        echo 'Numéro de téléphone : ' . $this->getPhoneNumber() . '<br>';
+
+        if ($this->getIsAdmin() === true) {
+            echo 'Cet utilisateur est administrateur.' . '<br>';
+        } else {
+            echo "Cet utilisateur n'est pas administrateur." . '<br>';
+        }
+
+        if ($this->getMustChangePassword() === true) {
+            echo 'Cet utilisateur doit changer son mot de passe.' . '<br>';
+        } else {
+            echo 'Cet utilisateur a changé son mot de passe.' . '<br>';
+        }
+        echo '<br>';
     }
 }

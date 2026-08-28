@@ -20,7 +20,7 @@ class TripRepository extends Repository
         return Trip::class;
     }
 
-    public function findActualTrips(): array
+    public function findAvailablesTrips(): array
     {
 
         $date = new DateTimeImmutable('now', new DateTimeZone('Europe/Paris'));

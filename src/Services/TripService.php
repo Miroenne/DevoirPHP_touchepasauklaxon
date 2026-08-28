@@ -6,11 +6,14 @@ use App\DTO\TripDetails;
 use App\Exceptions\RessourceNotFoundException;
 use App\Services\Service;
 use App\Models\Trip;
+use App\Models\Agency;
+use App\Models\User;
 use App\Repositories\AgencyRepository;
 use App\Repositories\TripRepository;
 use App\Repositories\UserRepository;
-use App\Services\AgencyService;
-use App\Services\UserService;
+use DateTimeImmutable;
+use InvalidArgumentException;
+use Override;
 
 class TripService extends Service
 {
@@ -25,9 +28,9 @@ class TripService extends Service
         parent::__construct();
     }
 
-    public function findDetailsService(int $id): TripDetails
+    protected function toDetailsService(Trip $trip): TripDetails
     {
-
+        $id = $trip->getId();
         $userRepository = new UserRepository();
         $agencyRepository = new AgencyRepository();
         $trip = $this->repository->findById($id) ?? throw new RessourceNotFoundException();
@@ -38,5 +41,80 @@ class TripService extends Service
             departureAgency: $agencyRepository->findById($trip->getFromAgencyId()),
             arrivalAgency: $agencyRepository->findById($trip->getToAgencyId())
         );
+    }
+
+    public function createService(object $trip, ?int $userId = null): bool
+    {
+        echo $this->isExisting($trip);
+        if ($this->isExisting($trip) === true) {
+            throw new InvalidArgumentException("There's already an existing trip with availables places");
+        }
+
+        return parent::createService($trip, $userId);
+    }
+
+    public function findAllService(?int $id = null): array
+    {
+        $trips = [];
+
+        $foundTrips = $this->repository->findAll();
+
+        foreach ($foundTrips as $foundTrip) {
+            $trip = $this->toDetailsService($foundTrip);
+            $trips[] = $trip;
+        }
+
+        return $trips;
+    }
+
+    public function findByIdService(int $id): TripDetails
+    {
+        $trip = $this->repository->findById($id);
+
+        return $this->toDetailsService($trip);
+    }
+
+    public function findAvailablesTripsService(): array
+    {
+        $tripRepository = $this->getRepository();
+        $availablesTrips = [];
+
+        $foundTrips = $tripRepository->findAvailablesTrips();
+
+        foreach ($foundTrips as $foundTrip) {
+            $trip = $this->toDetailsService($foundTrip);
+            $availablesTrips[] = $trip;
+        }
+        return $availablesTrips;
+    }
+
+    protected function isExisting(Trip $trip): bool
+    {
+
+        $tripRepository = $this->getRepository();
+        $existingTrips = $tripRepository->findAll();
+        $departure = new DateTimeImmutable($trip->getDepartureAt()->format('Y-m-d'));
+        $arrival = new DateTimeImmutable($trip->getArrivalAt()->format('Y-m-d'));
+
+        $result = false;
+
+        foreach ($existingTrips as $existingTrip) {
+
+            $existingDeparture = new DateTimeImmutable($existingTrip->getDepartureAt()->format('Y-m-d'));
+            $existingArrival = new DateTimeImmutable($existingTrip->getArrivalAt()->format('Y-m-d'));
+
+            if (
+                $trip->getFromAgencyId() === $existingTrip->getFromAgencyId() &&
+                $trip->getToAgencyId() === $existingTrip->getToAgencyId()
+            ) {
+                if ($departure == $existingDeparture && $arrival == $existingArrival) {
+                    if ($existingTrip->getAvailablePlaces() > 0) {
+                        $result = true;
+                    }
+                }
+            }
+        }
+
+        return $result;
     }
 }
