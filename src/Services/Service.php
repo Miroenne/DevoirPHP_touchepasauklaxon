@@ -37,7 +37,7 @@ abstract class Service
         }
 
         if ($o instanceof User || $o instanceof Agency) {
-            if ($user->getAdmin() === false) {
+            if ($user->getIsAdmin() === false) {
                 throw new ForbiddenException('Only an admin can create this type of entity');
             }
         }
@@ -81,13 +81,13 @@ abstract class Service
         }
 
         if ($o instanceof User || $o instanceof Agency) {
-            if ($user->getAdmin() === false) {
+            if ($user->getIsAdmin() === false) {
                 throw new ForbiddenException('Only an admin can create this type of entity');
             }
         }
 
         if ($o instanceof Trip) {
-            if ($user->getId() !== $o->getAuthorId() && $user->getAdmin() === false) {
+            if ($user->getId() !== $o->getAuthorId() && $user->getIsAdmin() === false) {
                 throw new ForbiddenException('Only the creator of this trip or an admin can update it');
             }
         }
@@ -112,7 +112,7 @@ abstract class Service
         }
 
         if ($entity instanceof User || $entity instanceof Agency) {
-            if ($user->getAdmin() === false) {
+            if ($user->getIsAdmin() === false) {
                 throw new ForbiddenException('Only an admin can create this type of entity');
             }
         }
