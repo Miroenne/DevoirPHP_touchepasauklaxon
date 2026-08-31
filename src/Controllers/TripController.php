@@ -118,6 +118,81 @@ class TripController extends Controller
 
     public function updateController(): string
     {
-        return 'work in progress';
+        $departureDate = $_POST['departureDate'];
+        $departureTime = $_POST['departureTime'];
+        $arrivalDate = $_POST['arrivalDate'];
+        $arrivalTime = $_POST['arrivalTime'];
+
+        $departureAt = new DateTimeImmutable($departureDate . $departureTime);
+        $arrvialAt = new DateTimeImmutable($arrivalDate, $arrivalTime);
+
+
+        $availablePlaces = $_POST['availablePlaces'];
+        $totalPlaces = $_POST['totalPlaces'];
+        $authorId = $_SESSION['userId'];
+
+        try {
+            $fromAgencies = $this->agencyService->findByNameService($_POST['fromAgency']);
+            foreach ($fromAgencies as $fromAgency) {
+                if (strtolower($fromAgency->getName() === strtolower($_POST['fromAgency']))) {
+                    $fromAgencyId = $fromAgency->getId();
+                }
+            }
+        } catch (RessourceNotFoundException $e) {
+            $error = $this->serialize->serializeException(
+                'Departure agency (' . $_POST['fromAgency'] . ') not was not found',
+                404
+            );
+
+            return json_encode($error);
+        }
+
+        try {
+            $toAgencies = $this->agencyService->findByNameService($_POST['toAgency']);
+            foreach ($toAgencies as $toAgency) {
+                if (strtolower($toAgency->getName() === strtolower($_POST['toAgency']))) {
+                    $toAgencyId = $toAgency->getId();
+                }
+            }
+        } catch (RessourceNotFoundException $e) {
+            $error = $this->serialize->serializeException(
+                'Arrival agency (' . $_POST['toAgency'] . ') not was not found',
+                404
+            );
+
+            return json_encode($error);
+        }
+
+        $trip = new Trip(
+            $departureAt,
+            $arrvialAt,
+            $availablePlaces,
+            $totalPlaces,
+            $authorId,
+            $fromAgencyId,
+            $toAgencyId
+        );
+
+        try {
+            $this->tripService->createService($trip, $authorId);
+        } catch (InvalidArgumentException $e) {
+            $error = $this->serialize->serializeException(
+                $e->getMessage(),
+                $e->getStatusCode()
+            );
+            return json_encode($error);
+        } catch (RuntimeException $e) {
+            $error = $this->serialize->serializeException(
+                $e->getMessage(),
+                $e->getCode()
+            );
+            return json_encode($error);
+        }
+        $result = [
+            'message' => 'Trajet mis à jour avec succès',
+            'code' => 200
+        ];
+
+        return json_encode($result);
     }
 }
