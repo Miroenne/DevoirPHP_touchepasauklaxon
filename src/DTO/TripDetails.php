@@ -2,9 +2,7 @@
 
 namespace App\DTO;
 
-use App\Models\Agency;
-use App\Models\Trip;
-use App\Models\User;
+use App\Models\{Agency, Trip, User};
 use JsonSerializable;
 
 final class TripDetails implements JsonSerializable

@@ -5,12 +5,8 @@ namespace App\Services;
 use App\DTO\TripDetails;
 use App\Exceptions\RessourceNotFoundException;
 use App\Services\Service;
-use App\Models\Trip;
-use App\Models\Agency;
-use App\Models\User;
-use App\Repositories\AgencyRepository;
-use App\Repositories\TripRepository;
-use App\Repositories\UserRepository;
+use App\Models\{Trip, Agency, User};
+use App\Repositories\{AgencyRepository, TripRepository, UserRepository};
 use DateTimeImmutable;
 use InvalidArgumentException;
 use Override;
@@ -67,7 +63,7 @@ class TripService extends Service
         return $trips;
     }
 
-    public function findByIdService(int $id): TripDetails
+    public function findByIdService(int $id, ?int $userId): TripDetails
     {
         $trip = $this->repository->findById($id);
 

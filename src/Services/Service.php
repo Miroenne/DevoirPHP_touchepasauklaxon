@@ -2,16 +2,16 @@
 
 namespace App\Services;
 
+use App\Exceptions\{
+    ForbiddenException,
+    RessourceNotFoundException,
+    UnthorizedException,
+    InvalidArgumentException
+};
 use App\Repositories\Repository;
 use App\Repositories\UserRepository;
-use InvalidArgumentException;
 use RuntimeException;
-use App\Exceptions\ForbiddenException;
-use App\Exceptions\UnthorizedException;
-use App\Exceptions\RessourceNotFoundException;
-use App\Models\Agency;
-use App\Models\User;
-use App\Models\Trip;
+use App\Models\{Agency, Trip, User};
 
 abstract class Service
 {
@@ -77,8 +77,16 @@ abstract class Service
         return $entities;
     }
 
-    public function findByIdService(int $id): ?object
+    public function findByIdService(int $id, int $userId): ?object
     {
+        if ($this instanceof User) {
+
+            $user = $this->userRepository->findById($userId);
+
+            if ($id !== $userId && $user->getAdmin() !== true) {
+                throw new ForbiddenException('Only the account owner or an admin can access');
+            }
+        }
 
         $entity = $this->repository->findById($id);
 
