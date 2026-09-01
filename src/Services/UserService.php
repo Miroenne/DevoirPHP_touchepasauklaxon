@@ -2,11 +2,13 @@
 
 namespace App\Services;
 
+use App\Exceptions\ForbiddenException;
 use App\Exceptions\InvalidCredentialsException;
 use App\Services\Service;
 use App\Repositories\UserRepository;
 use App\Exceptions\RessourceNotFoundException;
-use InvalidArgumentException;
+use App\Exceptions\UnthorizedException;
+use App\Exceptions\InvalidArgumentException;
 
 
 class UserService extends Service
@@ -43,16 +45,23 @@ class UserService extends Service
         return ['user' => $user, 'csrfToken' => $csrfToken];
     }
 
-    public function findByEmailService(string $email): ?object
+    public function findByEmailService(string $email, ?int $userId = null): ?object
     {
-
+        if ($userId === null) {
+            throw new UnthorizedException('Connexion requise');
+        }
 
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             throw new InvalidArgumentException('Invalid email address');
         }
 
-        $user = $this->userRepository->findByEmail($email);
+        $user = $this->userRepository->findById($userId);
+        $searchedUser = $this->userRepository->findByEmail($email);
 
-        return $user ? $user : throw new RessourceNotFoundException();
+        if ($searchedUser->getId() !== $userId && $user->getIsAdmin() !== true) {
+            throw new ForbiddenException('Only the account owner or an admin can access');
+        }
+
+        return $searchedUser ? $searchedUser : throw new RessourceNotFoundException();
     }
 }

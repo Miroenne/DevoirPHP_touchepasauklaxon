@@ -29,9 +29,10 @@ abstract class Service
 
     public function createService(object $o, ?int $userId = null): bool
     {
+
         if ($o instanceof User || $o instanceof Agency) {
-            if (!isset($userid)) {
-                throw new UnthorizedException('User Id is required');
+            if (!isset($userId)) {
+                throw new UnthorizedException('Connection required');
             }
             $user = $this->userRepository->findById($userId);
 
@@ -41,7 +42,12 @@ abstract class Service
 
 
             if ($user->getIsAdmin() === false) {
-                throw new ForbiddenException('Only an admin can create this type of entity');
+                if ($o instanceof User) {
+                    throw new ForbiddenException('Only an admin can create a user');
+                }
+                if ($o instanceof Agency) {
+                    throw new ForbiddenException('Only an admin can create an agency');
+                }
             }
         }
 
@@ -50,20 +56,21 @@ abstract class Service
         }
 
         $newEntry = $this->repository->create($o);
-
-        return $newEntry ? $newEntry : throw new RuntimeException('Entry cannot been created');
+        $errorMessage = 'There was an error on the server and the request could not be completed ';
+        return $newEntry ? $newEntry : throw new RuntimeException($errorMessage);
     }
 
     public function findAllService(?int $id = null): array
     {
-        if ($this instanceof User) {
-            if (!isset($id)) {
-                throw new UnthorizedException('User Id is required');
+
+        if ($this instanceof UserService) {
+            if ($id === null) {
+                throw new UnthorizedException('Authentification required');
             }
             $user = $this->userRepository->findById($id);
 
             if ($user->getIsAdmin() === false) {
-                throw new ForbiddenException('Only an Admin can access to all the users list');
+                throw new ForbiddenException('Only an Admin can access to the users list');
             }
         }
 
@@ -77,34 +84,44 @@ abstract class Service
         return $entities;
     }
 
-    public function findByIdService(int $id, int $userId): ?object
+    public function findByIdService(int $id, ?int $userId = null): ?object
     {
-        if ($this instanceof User) {
+        if ($this instanceof UserService) {
+
+            if ($userId === null) {
+                throw new UnthorizedException('Authentification required');
+            }
 
             $user = $this->userRepository->findById($userId);
 
-            if ($id !== $userId && $user->getAdmin() !== true) {
+            if ($id !== $userId && $user->getIsAdmin() !== true) {
                 throw new ForbiddenException('Only the account owner or an admin can access');
             }
         }
+
 
         $entity = $this->repository->findById($id);
 
         return $entity !== null ? $entity : throw new RessourceNotFoundException();
     }
 
-    public function updateService(object $o, int $userId): bool
+    public function updateService(object $o, ?int $userId): bool
     {
-
+        if (!isset($userId)) {
+            throw new UnthorizedException('Connection required');
+        }
         $user = $this->userRepository->findById($userId);
 
         if ($user === null) {
             throw new RuntimeException('User not found');
         }
 
-        if ($o instanceof User || $o instanceof Agency) {
-            if ($user->getIsAdmin() === false) {
-                throw new ForbiddenException('Only an admin can create this type of entity');
+        if ($user->getIsAdmin() === false) {
+            if ($o instanceof User) {
+                throw new ForbiddenException('Only an admin can update a user');
+            }
+            if ($o instanceof Agency) {
+                throw new ForbiddenException('Only an admin can update an agency');
             }
         }
 
@@ -123,19 +140,25 @@ abstract class Service
         return $entity ? $entity : throw new RessourceNotFoundException();
     }
 
-    public function deleteService(int $id, int $userId): bool
+    public function deleteService(int $id, ?int $userId): bool
     {
+        if (!isset($userId)) {
+            throw new UnthorizedException('Connection required');
+        }
 
         $user = $this->userRepository->findById($userId);
         $entity = $this->repository->findById($id);
 
         if ($user === null) {
-            throw new RuntimeException('User not found');
+            throw new RessourceNotFoundException();
         }
 
-        if ($entity instanceof User || $entity instanceof Agency) {
-            if ($user->getIsAdmin() === false) {
-                throw new ForbiddenException('Only an admin can delete this type of entity');
+        if ($user->getIsAdmin() === false) {
+            if ($this instanceof UserService) {
+                throw new ForbiddenException('Only an admin can delete a user');
+            }
+            if ($this instanceof AgencyService) {
+                throw new ForbiddenException('Only an admin can delete an agency');
             }
         }
 

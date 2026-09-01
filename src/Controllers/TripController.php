@@ -46,7 +46,6 @@ class TripController extends Controller
         $departureAt = new DateTimeImmutable($departureDate . $departureTime);
         $arrvialAt = new DateTimeImmutable($arrivalDate, $arrivalTime);
 
-
         $availablePlaces = $_POST['availablePlaces'];
         $totalPlaces = $_POST['totalPlaces'];
         $authorId = $_SESSION['userId'];
@@ -110,7 +109,7 @@ class TripController extends Controller
         }
         $result = [
             'message' => 'Trajet créé avec succès',
-            'code' => 200
+            'responseCode' => 200
         ];
 
         return json_encode($result);
@@ -118,6 +117,7 @@ class TripController extends Controller
 
     public function updateController(): string
     {
+        $tripId = $_POST['tripId'];
         $departureDate = $_POST['departureDate'];
         $departureTime = $_POST['departureTime'];
         $arrivalDate = $_POST['arrivalDate'];
@@ -125,7 +125,6 @@ class TripController extends Controller
 
         $departureAt = new DateTimeImmutable($departureDate . $departureTime);
         $arrvialAt = new DateTimeImmutable($arrivalDate, $arrivalTime);
-
 
         $availablePlaces = $_POST['availablePlaces'];
         $totalPlaces = $_POST['totalPlaces'];
@@ -164,13 +163,14 @@ class TripController extends Controller
         }
 
         $trip = new Trip(
-            $departureAt,
-            $arrvialAt,
-            $availablePlaces,
-            $totalPlaces,
-            $authorId,
-            $fromAgencyId,
-            $toAgencyId
+            id: $tripId,
+            departureAt: $departureAt,
+            arrivalAt: $arrvialAt,
+            availablePlaces: $availablePlaces,
+            totalPlaces: $totalPlaces,
+            authorId: $authorId,
+            fromAgencyId: $fromAgencyId,
+            toAgencyId: $toAgencyId
         );
 
         try {
@@ -190,7 +190,7 @@ class TripController extends Controller
         }
         $result = [
             'message' => 'Trajet mis à jour avec succès',
-            'code' => 200
+            'responseCode' => 200
         ];
 
         return json_encode($result);

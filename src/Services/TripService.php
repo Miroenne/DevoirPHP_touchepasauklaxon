@@ -63,7 +63,7 @@ class TripService extends Service
         return $trips;
     }
 
-    public function findByIdService(int $id, ?int $userId): TripDetails
+    public function findByIdService(int $id, ?int $userId = null): TripDetails
     {
         $trip = $this->repository->findById($id);
 

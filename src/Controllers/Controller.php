@@ -13,6 +13,8 @@ use Exception;
 use JsonSerializable;
 use RuntimeException;
 use App\Models\{Agency, Trip, User};
+use App\Services\AgencyService;
+use App\Services\UserService;
 
 abstract class Controller
 {
@@ -33,78 +35,75 @@ abstract class Controller
 
     public function findAllController(): array
     {
-
-        if (isset($_SESSION['userId'])) {
-            $userId = $_SESSION['userId'];
-        }
+        $userId = $_GET['userId'] ?? null;
 
         try {
             $entities = $this->service->findAllService($userId);
 
-            foreach ($entities as $entity) {
-                $jsonEntity = json_encode($entity);
-                $jsonEntities[] = $jsonEntity;
+            if ($entities) {
+                foreach ($entities as $entity) {
+                    $jsonEntity = json_encode($entity);
+                    $jsonEntities[] = $jsonEntity;
+                }
             }
 
-            return $jsonEntities;
+            return ['entities' => $jsonEntities, 'responseCode' => 200];
         } catch (UnthorizedException $e) {
 
-            return $this->serialize->serializeException($e->getMessage(), $e->getCode());
+            return $this->serialize->serializeException($e->getMessage(), $e->getStatusCode());
         } catch (ForbiddenException $e) {
 
-            return $this->serialize->serializeException($e->getMessage(), $e->getCode());
+            return $this->serialize->serializeException($e->getMessage(), $e->getStatusCode());
         } catch (RessourceNotFoundException $e) {
 
-            return $this->serialize->serializeException($e->getMessage(), $e->getCode());
+            return $this->serialize->serializeException($e->getMessage(), $e->getStatusCode());
         }
     }
 
     public function findByIdController(): string
     {
-
-        if (isset($_POST['id']) && isset($_SESSION['userId'])) {
-            $searchId = $_POST['id'];
-            $userId = $_SESSION['userId'];
-        }
+        $searchId = $_GET['id'];
+        $userId = $_GET['userId'] ?? null;
 
         try {
             $entity = $this->service->findByIdService($searchId, $userId);
 
-            return json_encode($entity);
+            $result = ['entity' => $entity, 'responseCode' => 200];
+
+            return json_encode($result);
         } catch (ForbiddenException $e) {
 
-            $error = $this->serialize->serializeException($e->getMessage(), $e->getCode());
+            $error = $this->serialize->serializeException($e->getMessage(), $e->getStatusCode());
             return json_encode($error);
         } catch (RessourceNotFoundException $e) {
-            $error = $this->serialize->serializeException($e->getMessage(), $e->getCode());
+            $error = $this->serialize->serializeException($e->getMessage(), $e->getStatusCode());
+            return json_encode($error);
+        } catch (UnthorizedException $e) {
+            $error = $this->serialize->serializeException($e->getMessage(), $e->getStatusCode());
             return json_encode($error);
         }
     }
 
     public function deleteController(): string
     {
+        $deleteId = $_POST['id'];
+        $userId = $_POST['userId'] ?? null;
 
-        if (isset($_POST['id']) && isset($_SESSION['userId'])) {
-            $deleteId = $_POST['id'];
-            $userId = $_SESSION['userId'];
-        }
         try {
-            $deleteEntity = $this->service->deleteService($deleteId, $userId);
 
-            if ($deleteEntity instanceof User) {
-                $result = [
-                    'message' => 'Utilisateur supprimé',
-                    'statusCode' => 200
-                ];
-            } elseif ($deleteEntity instanceof Trip) {
+            if ($this instanceof UserController) {
+                throw new \Exception('Not implemented');
+            } elseif ($this instanceof TripController) {
+                $this->service->deleteService($deleteId, $userId);
                 $result = [
                     'message' => 'Trajet supprimé',
-                    'statusCode' => 200
+                    'responseCode' => 200
                 ];
-            } elseif ($deleteEntity instanceof Agency) {
+            } elseif ($this instanceof AgencyController) {
+                $this->service->deleteService($deleteId, $userId);
                 $result = [
                     'message' => 'Agence supprimée',
-                    'statusCode' => 200
+                    'responseCode' => 200
                 ];
             }
 
@@ -113,10 +112,10 @@ abstract class Controller
             $error = $this->serialize->serializeException($e->getMessage(), $e->getCode());
             return json_encode($error);
         } catch (ForbiddenException $e) {
-            $error = $this->serialize->serializeException($e->getMessage(), $e->getCode());
+            $error = $this->serialize->serializeException($e->getMessage(), $e->getStatusCode());
             return json_encode($error);
         } catch (RessourceNotFoundException $e) {
-            $error = $this->serialize->serializeException($e->getMessage(), $e->getCode());
+            $error = $this->serialize->serializeException($e->getMessage(), $e->getStatusCode());
             return json_encode($error);
         }
     }
