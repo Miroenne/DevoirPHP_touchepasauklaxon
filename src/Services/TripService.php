@@ -8,7 +8,7 @@ use App\Services\Service;
 use App\Models\{Trip, Agency, User};
 use App\Repositories\{AgencyRepository, TripRepository, UserRepository};
 use DateTimeImmutable;
-use InvalidArgumentException;
+use App\Exceptions\InvalidArgumentException;
 use Override;
 
 class TripService extends Service
@@ -41,7 +41,7 @@ class TripService extends Service
 
     public function createService(object $trip, ?int $userId = null): bool
     {
-        echo $this->isExisting($trip);
+
         if ($this->isExisting($trip) === true) {
             throw new InvalidArgumentException("There's already an existing trip with availables places");
         }

@@ -38,22 +38,28 @@ class TripController extends Controller
 
     public function createController(): string
     {
+
         $departureDate = $_POST['departureDate'];
         $departureTime = $_POST['departureTime'];
         $arrivalDate = $_POST['arrivalDate'];
         $arrivalTime = $_POST['arrivalTime'];
 
         $departureAt = new DateTimeImmutable($departureDate . $departureTime);
-        $arrvialAt = new DateTimeImmutable($arrivalDate, $arrivalTime);
+        $arrvialAt = new DateTimeImmutable($arrivalDate . $arrivalTime);
 
         $availablePlaces = $_POST['availablePlaces'];
         $totalPlaces = $_POST['totalPlaces'];
-        $authorId = $_SESSION['userId'];
+        $authorId = $_POST['userId'] ?? null;
+        $fromAgency = $_POST['fromAgency'];
+        $toAgency = $_POST['toAgency'];
+        $fromAgencyId = null;
+        $toAgencyId = null;
 
         try {
             $fromAgencies = $this->agencyService->findByNameService($_POST['fromAgency']);
+
             foreach ($fromAgencies as $fromAgency) {
-                if (strtolower($fromAgency->getName() === strtolower($_POST['fromAgency']))) {
+                if (strtolower($fromAgency->getName()) === strtolower($_POST['fromAgency'])) {
                     $fromAgencyId = $fromAgency->getId();
                 }
             }
@@ -68,8 +74,10 @@ class TripController extends Controller
 
         try {
             $toAgencies = $this->agencyService->findByNameService($_POST['toAgency']);
+
+
             foreach ($toAgencies as $toAgency) {
-                if (strtolower($toAgency->getName() === strtolower($_POST['toAgency']))) {
+                if (strtolower($toAgency->getName()) === strtolower($_POST['toAgency'])) {
                     $toAgencyId = $toAgency->getId();
                 }
             }
@@ -128,10 +136,11 @@ class TripController extends Controller
 
         $availablePlaces = $_POST['availablePlaces'];
         $totalPlaces = $_POST['totalPlaces'];
-        $authorId = $_SESSION['userId'];
+        $authorId = $_POST['userId'];
 
         try {
             $fromAgencies = $this->agencyService->findByNameService($_POST['fromAgency']);
+
             foreach ($fromAgencies as $fromAgency) {
                 if (strtolower($fromAgency->getName() === strtolower($_POST['fromAgency']))) {
                     $fromAgencyId = $fromAgency->getId();
@@ -148,6 +157,7 @@ class TripController extends Controller
 
         try {
             $toAgencies = $this->agencyService->findByNameService($_POST['toAgency']);
+
             foreach ($toAgencies as $toAgency) {
                 if (strtolower($toAgency->getName() === strtolower($_POST['toAgency']))) {
                     $toAgencyId = $toAgency->getId();

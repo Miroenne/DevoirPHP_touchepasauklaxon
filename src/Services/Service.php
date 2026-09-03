@@ -6,7 +6,8 @@ use App\Exceptions\{
     ForbiddenException,
     RessourceNotFoundException,
     UnthorizedException,
-    InvalidArgumentException
+    InvalidArgumentException,
+    InvalidCredentialsException
 };
 use App\Repositories\Repository;
 use App\Repositories\UserRepository;
@@ -29,6 +30,9 @@ abstract class Service
 
     public function createService(object $o, ?int $userId = null): bool
     {
+        if ($userId === null || trim($userId) === '') {
+            throw new InvalidCredentialsException('Connection required');
+        }
 
         if ($o instanceof User || $o instanceof Agency) {
             if (!isset($userId)) {
