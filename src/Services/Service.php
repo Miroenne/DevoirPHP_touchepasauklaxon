@@ -90,11 +90,12 @@ abstract class Service
 
     public function findByIdService(int $id, ?int $userId = null): ?object
     {
-        if ($this instanceof UserService) {
 
-            if ($userId === null) {
-                throw new UnthorizedException('Authentification required');
-            }
+        if (!isset($userId)) {
+            throw new UnthorizedException('Authentification required');
+        }
+
+        if ($this instanceof UserService) {
 
             $user = $this->userRepository->findById($userId);
 

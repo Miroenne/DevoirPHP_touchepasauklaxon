@@ -33,30 +33,23 @@ abstract class Controller
     abstract public function createController(): string;
     abstract public function updateController(): string;
 
-    public function findAllController(): array
+    public function findAllController(): string
     {
         $userId = $_GET['userId'] ?? null;
 
         try {
             $entities = $this->service->findAllService($userId);
 
-            if ($entities) {
-                foreach ($entities as $entity) {
-                    $jsonEntity = json_encode($entity);
-                    $jsonEntities[] = $jsonEntity;
-                }
-            }
-
-            return ['entities' => $jsonEntities, 'responseCode' => 200];
+            return $this->toJson(['entities' => $entities ?: [], 'responseCode' => 200]);
         } catch (UnthorizedException $e) {
-
-            return $this->serialize->serializeException($e->getMessage(), $e->getStatusCode());
+            $error = $this->serialize->serializeException($e->getMessage(), $e->getStatusCode());
+            return $this->toJson($error);
         } catch (ForbiddenException $e) {
-
-            return $this->serialize->serializeException($e->getMessage(), $e->getStatusCode());
+            $error = $this->serialize->serializeException($e->getMessage(), $e->getStatusCode());
+            return $this->toJson($error);
         } catch (RessourceNotFoundException $e) {
-
-            return $this->serialize->serializeException($e->getMessage(), $e->getStatusCode());
+            $error = $this->serialize->serializeException($e->getMessage(), $e->getStatusCode());
+            return $this->toJson($error);
         }
     }
 
@@ -70,17 +63,17 @@ abstract class Controller
 
             $result = ['entity' => $entity, 'responseCode' => 200];
 
-            return json_encode($result);
+            return $this->toJson($result);
         } catch (ForbiddenException $e) {
 
             $error = $this->serialize->serializeException($e->getMessage(), $e->getStatusCode());
-            return json_encode($error);
+            return $this->toJson($error);
         } catch (RessourceNotFoundException $e) {
             $error = $this->serialize->serializeException($e->getMessage(), $e->getStatusCode());
-            return json_encode($error);
+            return $this->toJson($error);
         } catch (UnthorizedException $e) {
             $error = $this->serialize->serializeException($e->getMessage(), $e->getStatusCode());
-            return json_encode($error);
+            return $this->toJson($error);
         }
     }
 
@@ -107,16 +100,21 @@ abstract class Controller
                 ];
             }
 
-            return json_encode($result);
+            return $this->toJson($result);
         } catch (RuntimeException $e) {
             $error = $this->serialize->serializeException($e->getMessage(), $e->getCode());
-            return json_encode($error);
+            return $this->toJson($error);
         } catch (ForbiddenException $e) {
             $error = $this->serialize->serializeException($e->getMessage(), $e->getStatusCode());
-            return json_encode($error);
+            return $this->toJson($error);
         } catch (RessourceNotFoundException $e) {
             $error = $this->serialize->serializeException($e->getMessage(), $e->getStatusCode());
-            return json_encode($error);
+            return $this->toJson($error);
         }
+    }
+
+    protected function toJson(mixed $data): string
+    {
+        return json_encode($data, JSON_UNESCAPED_UNICODE);
     }
 }

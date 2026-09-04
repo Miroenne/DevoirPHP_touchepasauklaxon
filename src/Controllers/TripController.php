@@ -69,7 +69,7 @@ class TripController extends Controller
                 404
             );
 
-            return json_encode($error);
+            return $this->toJson($error);
         }
 
         try {
@@ -87,7 +87,7 @@ class TripController extends Controller
                 404
             );
 
-            return json_encode($error);
+            return $this->toJson($error);
         }
 
         $trip = new Trip(
@@ -107,20 +107,20 @@ class TripController extends Controller
                 $e->getMessage(),
                 $e->getStatusCode()
             );
-            return json_encode($error);
+            return $this->toJson($error);
         } catch (RuntimeException $e) {
             $error = $this->serialize->serializeException(
                 $e->getMessage(),
                 $e->getCode()
             );
-            return json_encode($error);
+            return $this->toJson($error);
         }
         $result = [
             'message' => 'Trajet créé avec succès',
             'responseCode' => 200
         ];
 
-        return json_encode($result);
+        return $this->toJson($result);
     }
 
     public function updateController(): string
@@ -132,7 +132,7 @@ class TripController extends Controller
         $arrivalTime = $_POST['arrivalTime'];
 
         $departureAt = new DateTimeImmutable($departureDate . $departureTime);
-        $arrvialAt = new DateTimeImmutable($arrivalDate, $arrivalTime);
+        $arrvialAt = new DateTimeImmutable($arrivalDate . $arrivalTime);
 
         $availablePlaces = $_POST['availablePlaces'];
         $totalPlaces = $_POST['totalPlaces'];
@@ -142,7 +142,7 @@ class TripController extends Controller
             $fromAgencies = $this->agencyService->findByNameService($_POST['fromAgency']);
 
             foreach ($fromAgencies as $fromAgency) {
-                if (strtolower($fromAgency->getName() === strtolower($_POST['fromAgency']))) {
+                if (strtolower($fromAgency->getName()) === strtolower($_POST['fromAgency'])) {
                     $fromAgencyId = $fromAgency->getId();
                 }
             }
@@ -152,14 +152,14 @@ class TripController extends Controller
                 404
             );
 
-            return json_encode($error);
+            return $this->toJson($error);
         }
 
         try {
             $toAgencies = $this->agencyService->findByNameService($_POST['toAgency']);
 
             foreach ($toAgencies as $toAgency) {
-                if (strtolower($toAgency->getName() === strtolower($_POST['toAgency']))) {
+                if (strtolower($toAgency->getName()) === strtolower($_POST['toAgency'])) {
                     $toAgencyId = $toAgency->getId();
                 }
             }
@@ -169,7 +169,7 @@ class TripController extends Controller
                 404
             );
 
-            return json_encode($error);
+            return $this->toJson($error);
         }
 
         $trip = new Trip(
@@ -184,25 +184,39 @@ class TripController extends Controller
         );
 
         try {
-            $this->tripService->createService($trip, $authorId);
+            $this->tripService->updateService($trip, $authorId);
         } catch (InvalidArgumentException $e) {
             $error = $this->serialize->serializeException(
                 $e->getMessage(),
                 $e->getStatusCode()
             );
-            return json_encode($error);
+            return $this->toJson($error);
         } catch (RuntimeException $e) {
             $error = $this->serialize->serializeException(
                 $e->getMessage(),
                 $e->getCode()
             );
-            return json_encode($error);
+            return $this->toJson($error);
         }
         $result = [
             'message' => 'Trajet mis à jour avec succès',
             'responseCode' => 200
         ];
 
-        return json_encode($result);
+        return $this->toJson($result);
+    }
+
+    public function findAvailablesTripsController(): string
+    {
+
+        try {
+            $availableTrips = $this->tripService->findAvailablesTripsService();
+
+            $result = ['availablesTrip' => $availableTrips, 'responseCode' => 200];
+            return $this->toJson($result);
+        } catch (RessourceNotFoundException $e) {
+            $error = $this->serialize->serializeException($e->getMessage(), $e->getStatusCode());
+            return $this->toJson($error);
+        }
     }
 }

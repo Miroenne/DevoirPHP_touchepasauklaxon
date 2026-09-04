@@ -9,7 +9,7 @@ use App\Models\{Trip, Agency, User};
 use App\Repositories\{AgencyRepository, TripRepository, UserRepository};
 use DateTimeImmutable;
 use App\Exceptions\InvalidArgumentException;
-use Override;
+use App\Exceptions\UnthorizedException;
 
 class TripService extends Service
 {
@@ -60,12 +60,32 @@ class TripService extends Service
             $trips[] = $trip;
         }
 
+        if (!isset($trips)) {
+            throw new RessourceNotFoundException();
+        }
+
         return $trips;
     }
 
     public function findByIdService(int $id, ?int $userId = null): TripDetails
     {
+
+        if (!isset($userId)) {
+            throw new UnthorizedException('Connection required');
+        }
+
+        $userRepository = new UserRepository();
+        $user = $userRepository->findById($userId);
+
+        if (!isset($userId)) {
+            throw new RessourceNotFoundException();
+        }
+
         $trip = $this->repository->findById($id);
+
+        if (!isset($trip)) {
+            throw new RessourceNotFoundException();
+        }
 
         return $this->toDetailsService($trip);
     }
@@ -81,6 +101,11 @@ class TripService extends Service
             $trip = $this->toDetailsService($foundTrip);
             $availablesTrips[] = $trip;
         }
+
+        if (!isset($availablesTrips)) {
+            throw new RessourceNotFoundException();
+        }
+
         return $availablesTrips;
     }
 

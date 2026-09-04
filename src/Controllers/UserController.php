@@ -19,14 +19,14 @@ class UserController extends Controller
     public function createController(): string
     {
         $res = ['message' => 'Not implemented', 'responseCode' => 501];
-        return json_encode($res);
+        return $this->toJson($res);
     }
 
     #[Override]
     public function updateController(): string
     {
         $res = ['message' => 'Not implemented', 'responseCode' => 501];
-        return json_encode($res);
+        return $this->toJson($res);
     }
 
     public function findByEmailController(): string
@@ -42,19 +42,19 @@ class UserController extends Controller
 
             $result = ['user' => $user, 'responseCode' => 200];
 
-            return json_encode($result);
+            return $this->toJson($result);
         } catch (UnthorizedException $e) {
             $error = $this->serialize->serializeException($e->getMessage(), $e->getStatusCode());
-            return json_encode($error);
+            return $this->toJson($error);
         } catch (InvalidArgumentException $e) {
             $error = $this->serialize->serializeException($e->getMessage(), $e->getStatusCode());
-            return json_encode($error);
+            return $this->toJson($error);
         } catch (ForbiddenException $e) {
             $error = $this->serialize->serializeException($e->getMessage(), $e->getStatusCode());
-            return json_encode($error);
+            return $this->toJson($error);
         } catch (RessourceNotFoundException $e) {
             $error = $this->serialize->serializeException($e->getMessage(), $e->getStatusCode());
-            return json_encode($error);
+            return $this->toJson($error);
         }
     }
 
@@ -83,10 +83,10 @@ class UserController extends Controller
             $user = $connect['user'];
             $result = ['user' => $user, 'responseCode' => 200];
 
-            return json_encode($result);
+            return $this->toJson($result);
         } catch (InvalidCredentialsException $e) {
             $error = $this->serialize->serializeException($e->getMessage(), $e->getStatusCode());
-            return json_encode($error);
+            return $this->toJson($error);
         }
     }
 
@@ -102,7 +102,7 @@ class UserController extends Controller
                 'responseCode' => '400'
             ];
 
-            return json_encode($error);
+            return $this->toJson($error);
         }
 
         try {
@@ -138,16 +138,16 @@ class UserController extends Controller
 
             session_destroy();
             $res = ['message' => 'Déconnexion réussie', 'responseCode' => 200];
-            return json_encode($res);
+            return $this->toJson($res);
         } catch (UnthorizedException $e) {
             $error = $this->serialize->serializeException($e->getMessage(), $e->getStatusCode());
-            return json_encode($error);
+            return $this->toJson($error);
         } catch (ForbiddenException $e) {
             $error = $this->serialize->serializeException($e->getMessage(), $e->getStatusCode());
-            return json_encode($error);
+            return $this->toJson($error);
         } catch (RessourceNotFoundException $e) {
             $error = $this->serialize->serializeException($e->getMessage(), $e->getStatusCode());
-            return json_encode($error);
+            return $this->toJson($error);
         }
     }
 }

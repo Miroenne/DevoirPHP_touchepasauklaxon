@@ -5,7 +5,7 @@ namespace App\Exceptions;
 class ExceptionSerialize
 {
 
-    public function __contruct() {}
+    public function __construct() {}
 
 
     public function serializeException(string $message, int $code): array

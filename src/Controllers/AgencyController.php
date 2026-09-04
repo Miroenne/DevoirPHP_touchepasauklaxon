@@ -45,59 +45,55 @@ class AgencyController extends Controller
                 'responseCode' => 200
             ];
 
-            return json_encode($result);
+            return $this->toJson($result);
         } catch (UnthorizedException $e) {
             $error = $this->serialize->serializeException(
                 $e->getMessage(),
                 $e->getStatusCode()
             );
-            return json_encode($error);
+            return $this->toJson($error);
         } catch (RessourceNotFoundException $e) {
             $error = $this->serialize->serializeException(
                 $e->getMessage(),
                 $e->getStatusCode()
             );
-            return json_encode($error);
+            return $this->toJson($error);
         } catch (ForbiddenException $e) {
             $error = $this->serialize->serializeException(
                 $e->getMessage(),
                 $e->getStatusCode()
             );
-            return json_encode($error);
+            return $this->toJson($error);
         } catch (InvalidArgumentException $e) {
             $error = $this->serialize->serializeException(
                 $e->getMessage(),
                 $e->getStatusCode()
             );
-            return json_encode($error);
+            return $this->toJson($error);
         } catch (RuntimeException $e) {
             $error = $this->serialize->serializeException(
                 $e->getMessage(),
                 $e->getCode()
             );
-            return json_encode($error);
+            return $this->toJson($error);
         }
     }
 
-    public function findByNameController(): array
+    public function findByNameController(): string
     {
 
         $name = $_POST['name'];
 
         try {
-            $result = $this->agencyService->findByNameService($name);
+            $agencies = $this->agencyService->findByNameService($name);
 
-            foreach ($result as $agency) {
-                $jsonAgency = json_encode($agency);
-                $jsonAgencies[] = $jsonAgency;
-            }
-            return ['agencies' => $jsonAgencies, 'responseCode' => 200];
+            return $this->toJson(['agencies' => $agencies, 'responseCode' => 200]);
         } catch (RessourceNotFoundException $e) {
             $error = $this->serialize->serializeException(
                 $e->getMessage(),
                 $e->getStatusCode()
             );
-            return $error;
+            return $this->toJson($error);
         }
     }
 
@@ -117,37 +113,37 @@ class AgencyController extends Controller
                 'responseCode' => 200
             ];
 
-            return json_encode($result);
+            return $this->toJson($result);
         } catch (UnthorizedException $e) {
             $error = $this->serialize->serializeException(
                 $e->getMessage(),
                 $e->getStatusCode()
             );
-            return json_encode($error);
+            return $this->toJson($error);
         } catch (RessourceNotFoundException $e) {
             $error = $this->serialize->serializeException(
                 $e->getMessage(),
                 $e->getStatusCode()
             );
-            return json_encode($error);
+            return $this->toJson($error);
         } catch (ForbiddenException $e) {
             $error = $this->serialize->serializeException(
                 $e->getMessage(),
                 $e->getStatusCode()
             );
-            return json_encode($error);
+            return $this->toJson($error);
         } catch (InvalidArgumentException $e) {
             $error = $this->serialize->serializeException(
                 $e->getMessage(),
                 $e->getStatusCode()
             );
-            return json_encode($error);
+            return $this->toJson($error);
         } catch (RuntimeException $e) {
             $error = $this->serialize->serializeException(
                 $e->getMessage(),
                 $e->getCode()
             );
-            return json_encode($error);
+            return $this->toJson($error);
         }
     }
 }
