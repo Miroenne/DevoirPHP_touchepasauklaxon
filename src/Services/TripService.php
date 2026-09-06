@@ -112,24 +112,29 @@ class TripService extends Service
     protected function isExisting(Trip $trip): bool
     {
 
-        $tripRepository = $this->getRepository();
-        $existingTrips = $tripRepository->findAll();
+        $tripRepository = new TripRepository();
+        $availablesTrips = $tripRepository->findAvailablesTrips();
         $departure = new DateTimeImmutable($trip->getDepartureAt()->format('Y-m-d'));
         $arrival = new DateTimeImmutable($trip->getArrivalAt()->format('Y-m-d'));
 
+        $usersCount = $trip->getTotalPlaces() - $trip->getAvailablePlaces();
+
         $result = false;
 
-        foreach ($existingTrips as $existingTrip) {
+        foreach ($availablesTrips as $availableTrip) {
 
-            $existingDeparture = new DateTimeImmutable($existingTrip->getDepartureAt()->format('Y-m-d'));
-            $existingArrival = new DateTimeImmutable($existingTrip->getArrivalAt()->format('Y-m-d'));
+            $existingDeparture = new DateTimeImmutable($availableTrip->getDepartureAt()->format('Y-m-d'));
+            $existingArrival = new DateTimeImmutable($availableTrip->getArrivalAt()->format('Y-m-d'));
 
             if (
-                $trip->getFromAgencyId() === $existingTrip->getFromAgencyId() &&
-                $trip->getToAgencyId() === $existingTrip->getToAgencyId()
+                $trip->getFromAgencyId() === $availableTrip->getFromAgencyId() &&
+                $trip->getToAgencyId() === $availableTrip->getToAgencyId()
             ) {
                 if ($departure == $existingDeparture && $arrival == $existingArrival) {
-                    if ($existingTrip->getAvailablePlaces() > 0) {
+                    if (
+                        $availableTrip->getAvailablePlaces() > 0 &&
+                        $availableTrip->getAvailablePlaces() > $usersCount
+                    ) {
                         $result = true;
                     }
                 }
