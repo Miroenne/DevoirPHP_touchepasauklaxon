@@ -49,6 +49,15 @@ class TripService extends Service
         return parent::createService($trip, $userId);
     }
 
+    public function updateService(object $trip, ?int $userId = null): bool
+    {
+        if ($this->isExisting($trip) === true) {
+            throw new InvalidArgumentException("There's already an existing trip with availables places");
+        }
+
+        return parent::updateService($trip, $userId);
+    }
+
     public function findAllService(?int $id = null): array
     {
         $trips = [];
@@ -131,16 +140,16 @@ class TripService extends Service
                 $trip->getToAgencyId() === $availableTrip->getToAgencyId()
             ) {
                 if ($departure == $existingDeparture && $arrival == $existingArrival) {
+
                     if (
                         $availableTrip->getAvailablePlaces() > 0 &&
-                        $availableTrip->getAvailablePlaces() > $usersCount
+                        $availableTrip->getAvailablePlaces() >= $usersCount
                     ) {
                         $result = true;
                     }
                 }
             }
         }
-
         return $result;
     }
 }
