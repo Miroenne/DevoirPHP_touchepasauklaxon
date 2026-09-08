@@ -1,17 +1,23 @@
 {
-    "name": "miroenne/touchepasauklaxon",
-    "description": "Devoir de formation sur le langage PHP",
-    "license": "MIT",
-    "autoload": {
-        "psr-4": {
-            "App\\": "src/"
-        }
-    },
-    "authors": [
-        {
-            "name": "Miroenne"
-        }
-    ],
-    "minimum-stability": "stable",
-    "require": {}
+  "name": "miroenne/touchepasauklaxon",
+  "description": "Devoir de formation sur le langage PHP",
+  "license": "MIT",
+  "autoload": {
+    "psr-4": {
+      "App\\": "src/"
+    }
+  },
+  "authors": [
+    {
+      "name": "Miroenne"
+    }
+  ],
+  "minimum-stability": "stable",
+  "require": {},
+  "scripts": {
+    "dev-serv": "php -S localhost:8080 -t public public/index.php"
+  },
+  "scripts-descriptions": {
+    "dev-serv": "start development server on port 8080"
+  }
 }
