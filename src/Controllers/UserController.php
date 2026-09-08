@@ -68,20 +68,12 @@ class UserController extends Controller
         try {
             $connect = $service->login($email, $password);
 
-            setcookie(
-                'csrf-token',
-                $connect['csrfToken'],
-                [
-                    'expires' => time() + 60 * 60 * 24,
-                    'path' => '/',
-                    'httponly' => true,
-                    'secure' => true,
-                    'samesite' => 'none'
-                ]
-            );
+            $_SESSION['userId'] = $connect['user']->getId();
+            $_SESSION['csrfToken'] = $connect['csrfToken'];            
 
             $user = $connect['user'];
-            $result = ['user' => $user, 'responseCode' => 200];
+            $csrfToken = $connect['csrfToken'];
+            $result = ['user' => $user, 'csrfToken' => $csrfToken, 'responseCode' => 200];
 
             return $this->toJson($result);
         } catch (InvalidCredentialsException $e) {
@@ -93,7 +85,7 @@ class UserController extends Controller
     public function logoutController(): string
     {
         $service = new UserService();
-        $id = $_POST['id'];
+        $id = (int) $_POST['id'];
         $userId = $_POST['userId'];
 
         if ($id !== $userId) {
