@@ -1,6 +1,6 @@
 <?php
 
-use App\Controllers\{UserController, TripController, AgencyController};
+use App\Controllers\{UserController, TripController, AgencyController, ViewController};
 
 
 return [
@@ -28,5 +28,9 @@ return [
     ['POST', '/api/trips', [TripController::class, 'createController'], ['auth', 'csrf']],
     ['GET', '/api/trips/by-id', [TripController::class, 'findByIdController'], ['auth']],
     ['POST', '/api/trips/update', [TripController::class, 'updateController'], ['auth', 'csrf']],
-    ['POST', '/api/trips/delete', [TripController::class, 'deleteController'], ['auth', 'csrf']]
+    ['POST', '/api/trips/delete', [TripController::class, 'deleteController'], ['auth', 'csrf']],
+
+    // --------- Views ---------
+    ['GET', '/dashboard', [ViewController::class, 'dashboard'], [], 'html'],
+    ['GET', '/test', [ViewController::class, 'test'], [], 'html']
 ];

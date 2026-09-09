@@ -17,6 +17,7 @@ class Router{
                 'path' => $route[1],
                 'handler' => $route[2],
                 'middlewares' => $route[3] ?? [],
+                'type' => $route[4] ?? 'json'
             ];
         }
     }
@@ -33,6 +34,10 @@ class Router{
             foreach($route['middlewares'] as $name){
                 $this->middlewares->run($name);
             }
+
+           header('Content-Type: ' . ($route['type'] === 'html'
+           ? 'text/html; charset=utf-8'
+           : 'application/json; charset=utf-8'));
 
             [$class, $action] = $route['handler'];
             return (new $class())->$action();
