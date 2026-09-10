@@ -2,11 +2,35 @@
 
 namespace App\Controllers;
 
-class ViewController{
+class ViewController
+{
 
-    public function dashboard(): string {
-        return '<!DOCTYPE html><html lang="fr"><head><meta charset="utf-8">'
-             . '<title>Dashboard</title></head><body><h1>Dashboard OK</h1></body></html>';
+    private const VIEW_PATH = __DIR__ . '/../Views/';
+
+    private function render(string $view, array $data = []): string
+    {
+        $__file = self::VIEW_PATH . $view . '.php';
+
+        if (!is_file($__file)) {
+            throw new \RuntimeException("View was not found : $view");
+        }
+
+        ob_start();
+        try {
+            (static function (string $__file, array $__data): void {
+                extract($__data, EXTR_SKIP);
+                require $__file;
+            })($__file, $data);
+            return ob_get_contents();
+        } finally {
+            ob_end_clean();
+        }
     }
 
+
+
+    public function dashboard(): string
+    {
+        return $this->render('dashboard');
+    }
 }

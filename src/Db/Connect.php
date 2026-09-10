@@ -22,7 +22,10 @@ class Connect
             $dbName = $config['DB_DATABASE'] ?? '';
             $userName = $config['DB_USERNAME'] ?? '';
             $password = $config['DB_PASSWORD'] ?? '';
-            $options = [];
+            $options = [
+                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+                PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
+            ];
         } else {
             $config = parse_ini_file(__DIR__ . '/../env/.env');
             $host = $config['DB_ADDRESS'] ?? '';

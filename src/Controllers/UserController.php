@@ -2,7 +2,7 @@
 
 namespace App\Controllers;
 
-use App\Exceptions\{ForbiddenException, UnthorizedException, InvalidArgumentException, InvalidCredentialsException, RessourceNotFoundException};
+use App\Exceptions\{ForbiddenException, UnthorizedException, InvalidArgumentException, InvalidCredentialsException, ResourceNotFoundException};
 use App\Services\UserService;
 use Override;
 
@@ -52,7 +52,7 @@ class UserController extends Controller
         } catch (ForbiddenException $e) {
             $error = $this->serialize->serializeException($e->getMessage(), $e->getStatusCode());
             return $this->toJson($error);
-        } catch (RessourceNotFoundException $e) {
+        } catch (ResourceNotFoundException $e) {
             $error = $this->serialize->serializeException($e->getMessage(), $e->getStatusCode());
             return $this->toJson($error);
         }
@@ -137,7 +137,7 @@ class UserController extends Controller
         } catch (ForbiddenException $e) {
             $error = $this->serialize->serializeException($e->getMessage(), $e->getStatusCode());
             return $this->toJson($error);
-        } catch (RessourceNotFoundException $e) {
+        } catch (ResourceNotFoundException $e) {
             $error = $this->serialize->serializeException($e->getMessage(), $e->getStatusCode());
             return $this->toJson($error);
         }

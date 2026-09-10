@@ -31,6 +31,6 @@ return [
     ['POST', '/api/trips/delete', [TripController::class, 'deleteController'], ['auth', 'csrf']],
 
     // --------- Views ---------
-    ['GET', '/dashboard', [ViewController::class, 'dashboard'], [], 'html'],
+    ['GET', '/', [ViewController::class, 'dashboard'], [], 'html'],
     ['GET', '/test', [ViewController::class, 'test'], [], 'html']
 ];

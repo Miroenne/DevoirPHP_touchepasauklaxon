@@ -4,7 +4,7 @@ namespace App\Services;
 
 use App\Services\Service;
 use App\Repositories\AgencyRepository;
-use App\Exceptions\RessourceNotFoundException;
+use App\Exceptions\ResourceNotFoundException;
 
 class AgencyService extends Service
 {
@@ -25,6 +25,6 @@ class AgencyService extends Service
 
         $entity = $repository->findByName($name);
 
-        return $entity !== [] ? $entity : throw new RessourceNotFoundException();
+        return $entity !== [] ? $entity : throw new ResourceNotFoundException();
     }
 }

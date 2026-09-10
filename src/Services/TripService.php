@@ -3,7 +3,7 @@
 namespace App\Services;
 
 use App\DTO\TripDetails;
-use App\Exceptions\RessourceNotFoundException;
+use App\Exceptions\ResourceNotFoundException;
 use App\Services\Service;
 use App\Models\{Trip, Agency, User};
 use App\Repositories\{AgencyRepository, TripRepository, UserRepository};
@@ -29,7 +29,7 @@ class TripService extends Service
         $id = $trip->getId();
         $userRepository = new UserRepository();
         $agencyRepository = new AgencyRepository();
-        $trip = $this->repository->findById($id) ?? throw new RessourceNotFoundException();
+        $trip = $this->repository->findById($id) ?? throw new ResourceNotFoundException();
 
         return new TripDetails(
             trip: $trip,
@@ -70,7 +70,7 @@ class TripService extends Service
         }
 
         if (!isset($trips)) {
-            throw new RessourceNotFoundException();
+            throw new ResourceNotFoundException();
         }
 
         return $trips;
@@ -87,13 +87,13 @@ class TripService extends Service
         $user = $userRepository->findById($userId);
 
         if (!isset($userId)) {
-            throw new RessourceNotFoundException();
+            throw new ResourceNotFoundException();
         }
 
         $trip = $this->repository->findById($id);
 
         if (!isset($trip)) {
-            throw new RessourceNotFoundException();
+            throw new ResourceNotFoundException();
         }
 
         return $this->toDetailsService($trip);
@@ -112,7 +112,7 @@ class TripService extends Service
         }
 
         if (!isset($availablesTrips)) {
-            throw new RessourceNotFoundException();
+            throw new ResourceNotFoundException();
         }
 
         return $availablesTrips;

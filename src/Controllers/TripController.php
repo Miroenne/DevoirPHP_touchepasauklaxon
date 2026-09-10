@@ -5,7 +5,7 @@ namespace App\Controllers;
 use App\Controllers\Controller;
 use App\Exceptions\{
     ForbiddenException,
-    RessourceNotFoundException,
+    ResourceNotFoundException,
     UnthorizedException,
     InvalidArgumentException,
     ExceptionSerialize
@@ -63,7 +63,7 @@ class TripController extends Controller
                     $fromAgencyId = $fromAgency->getId();
                 }
             }
-        } catch (RessourceNotFoundException $e) {
+        } catch (ResourceNotFoundException $e) {
             $error = $this->serialize->serializeException(
                 'Departure agency (' . $_POST['fromAgency'] . ') not was not found',
                 404
@@ -81,7 +81,7 @@ class TripController extends Controller
                     $toAgencyId = $toAgency->getId();
                 }
             }
-        } catch (RessourceNotFoundException $e) {
+        } catch (ResourceNotFoundException $e) {
             $error = $this->serialize->serializeException(
                 'Arrival agency (' . $_POST['toAgency'] . ') not was not found',
                 404
@@ -146,7 +146,7 @@ class TripController extends Controller
                     $fromAgencyId = $fromAgency->getId();
                 }
             }
-        } catch (RessourceNotFoundException $e) {
+        } catch (ResourceNotFoundException $e) {
             $error = $this->serialize->serializeException(
                 'Departure agency (' . $_POST['fromAgency'] . ') not was not found',
                 404
@@ -163,7 +163,7 @@ class TripController extends Controller
                     $toAgencyId = $toAgency->getId();
                 }
             }
-        } catch (RessourceNotFoundException $e) {
+        } catch (ResourceNotFoundException $e) {
             $error = $this->serialize->serializeException(
                 'Arrival agency (' . $_POST['toAgency'] . ') not was not found',
                 404
@@ -214,7 +214,7 @@ class TripController extends Controller
 
             $result = ['availablesTrip' => $availableTrips, 'responseCode' => 200];
             return $this->toJson($result);
-        } catch (RessourceNotFoundException $e) {
+        } catch (ResourceNotFoundException $e) {
             $error = $this->serialize->serializeException($e->getMessage(), $e->getStatusCode());
             return $this->toJson($error);
         }

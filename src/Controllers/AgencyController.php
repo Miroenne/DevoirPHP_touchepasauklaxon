@@ -5,7 +5,7 @@ namespace App\Controllers;
 use App\Services\AgencyService;
 use App\Exceptions\{
     ForbiddenException,
-    RessourceNotFoundException,
+    ResourceNotFoundException,
     UnthorizedException,
     InvalidArgumentException,
     ExceptionSerialize
@@ -52,7 +52,7 @@ class AgencyController extends Controller
                 $e->getStatusCode()
             );
             return $this->toJson($error);
-        } catch (RessourceNotFoundException $e) {
+        } catch (ResourceNotFoundException $e) {
             $error = $this->serialize->serializeException(
                 $e->getMessage(),
                 $e->getStatusCode()
@@ -88,7 +88,7 @@ class AgencyController extends Controller
             $agencies = $this->agencyService->findByNameService($name);
 
             return $this->toJson(['agencies' => $agencies, 'responseCode' => 200]);
-        } catch (RessourceNotFoundException $e) {
+        } catch (ResourceNotFoundException $e) {
             $error = $this->serialize->serializeException(
                 $e->getMessage(),
                 $e->getStatusCode()
@@ -120,7 +120,7 @@ class AgencyController extends Controller
                 $e->getStatusCode()
             );
             return $this->toJson($error);
-        } catch (RessourceNotFoundException $e) {
+        } catch (ResourceNotFoundException $e) {
             $error = $this->serialize->serializeException(
                 $e->getMessage(),
                 $e->getStatusCode()

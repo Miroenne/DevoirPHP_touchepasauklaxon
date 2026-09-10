@@ -6,7 +6,7 @@ use App\Exceptions\ForbiddenException;
 use App\Exceptions\InvalidCredentialsException;
 use App\Services\Service;
 use App\Repositories\UserRepository;
-use App\Exceptions\RessourceNotFoundException;
+use App\Exceptions\ResourceNotFoundException;
 use App\Exceptions\UnthorizedException;
 use App\Exceptions\InvalidArgumentException;
 
@@ -62,6 +62,6 @@ class UserService extends Service
             throw new ForbiddenException('Only the account owner or an admin can access');
         }
 
-        return $searchedUser ? $searchedUser : throw new RessourceNotFoundException();
+        return $searchedUser ? $searchedUser : throw new ResourceNotFoundException();
     }
 }

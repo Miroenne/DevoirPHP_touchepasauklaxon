@@ -2,11 +2,11 @@
 
 namespace App\Exceptions;
 
-class RessourceNotFoundException extends \RuntimeException
+class ResourceNotFoundException extends \RuntimeException
 {
     protected int $statusCode;
 
-    public function __construct(string $message = 'Requested ressource was not found')
+    public function __construct(string $message = 'Requested resource was not found')
     {
         parent::__construct($message);
         $this->statusCode = 404;

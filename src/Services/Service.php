@@ -4,7 +4,7 @@ namespace App\Services;
 
 use App\Exceptions\{
     ForbiddenException,
-    RessourceNotFoundException,
+    ResourceNotFoundException,
     UnthorizedException,
     InvalidArgumentException,
     InvalidCredentialsException
@@ -41,7 +41,7 @@ abstract class Service
             $user = $this->userRepository->findById($userId);
 
             if ($user === null) {
-                throw new RessourceNotFoundException();
+                throw new ResourceNotFoundException();
             }
 
 
@@ -82,7 +82,7 @@ abstract class Service
         $entities = $this->repository->findAll();
 
         if ($entities === []) {
-            throw new RessourceNotFoundException();
+            throw new ResourceNotFoundException();
         }
 
         return $entities;
@@ -107,7 +107,7 @@ abstract class Service
 
         $entity = $this->repository->findById($id);
 
-        return $entity !== null ? $entity : throw new RessourceNotFoundException();
+        return $entity !== null ? $entity : throw new ResourceNotFoundException();
     }
 
     public function updateService(object $o, ?int $userId): bool
@@ -142,7 +142,7 @@ abstract class Service
 
         $entity = $this->repository->update($o);
 
-        return $entity ? $entity : throw new RessourceNotFoundException();
+        return $entity ? $entity : throw new ResourceNotFoundException();
     }
 
     public function deleteService(int $id, ?int $userId): bool
@@ -155,7 +155,7 @@ abstract class Service
         $entity = $this->repository->findById($id);
 
         if ($user === null) {
-            throw new RessourceNotFoundException();
+            throw new ResourceNotFoundException();
         }
 
         if ($user->getIsAdmin() === false) {
@@ -177,6 +177,6 @@ abstract class Service
 
         $entity = $this->repository->delete($id);
 
-        return $entity ? $entity : throw new RessourceNotFoundException();
+        return $entity ? $entity : throw new ResourceNotFoundException();
     }
 }

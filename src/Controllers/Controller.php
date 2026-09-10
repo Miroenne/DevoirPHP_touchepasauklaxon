@@ -4,7 +4,7 @@ namespace App\Controllers;
 
 use App\Exceptions\{
     ForbiddenException,
-    RessourceNotFoundException,
+    ResourceNotFoundException,
     UnthorizedException,
     ExceptionSerialize
 };
@@ -47,7 +47,7 @@ abstract class Controller
         } catch (ForbiddenException $e) {
             $error = $this->serialize->serializeException($e->getMessage(), $e->getStatusCode());
             return $this->toJson($error);
-        } catch (RessourceNotFoundException $e) {
+        } catch (ResourceNotFoundException $e) {
             $error = $this->serialize->serializeException($e->getMessage(), $e->getStatusCode());
             return $this->toJson($error);
         }
@@ -68,7 +68,7 @@ abstract class Controller
 
             $error = $this->serialize->serializeException($e->getMessage(), $e->getStatusCode());
             return $this->toJson($error);
-        } catch (RessourceNotFoundException $e) {
+        } catch (ResourceNotFoundException $e) {
             $error = $this->serialize->serializeException($e->getMessage(), $e->getStatusCode());
             return $this->toJson($error);
         } catch (UnthorizedException $e) {
@@ -107,7 +107,7 @@ abstract class Controller
         } catch (ForbiddenException $e) {
             $error = $this->serialize->serializeException($e->getMessage(), $e->getStatusCode());
             return $this->toJson($error);
-        } catch (RessourceNotFoundException $e) {
+        } catch (ResourceNotFoundException $e) {
             $error = $this->serialize->serializeException($e->getMessage(), $e->getStatusCode());
             return $this->toJson($error);
         }
