@@ -33,4 +33,9 @@ class ViewController
     {
         return $this->render('dashboard');
     }
+
+    public function test(): string
+    {
+        return $this->render('test');
+    }
 }

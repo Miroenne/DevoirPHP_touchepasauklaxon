@@ -37,11 +37,11 @@ class Router
             foreach ($route['middlewares'] as $name) {
                 $this->middlewares->run($name);
             }
-            /*
-           header('Content-Type: ' . ($route['type'] === 'html'
-           ? 'text/html; charset=utf-8'
-           : 'application/json; charset=utf-8'));
-           */
+
+            header('Content-Type: ' . ($route['type'] === 'html'
+                ? 'text/html; charset=utf-8'
+                : 'application/json; charset=utf-8'));
+
 
             [$class, $action] = $route['handler'];
             return (new $class())->$action();
