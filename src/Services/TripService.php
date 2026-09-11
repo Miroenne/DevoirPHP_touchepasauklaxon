@@ -111,10 +111,6 @@ class TripService extends Service
             $availablesTrips[] = $trip;
         }
 
-        if (!isset($availablesTrips)) {
-            throw new ResourceNotFoundException();
-        }
-
         return $availablesTrips;
     }
 

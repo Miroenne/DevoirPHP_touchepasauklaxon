@@ -2,6 +2,16 @@
 
 namespace App\Controllers;
 
+use App\Services\{UserService, AgencyService, TripService};
+use App\Exceptions\{
+    UnthorizedException,
+    ForbiddenException,
+    ResourceNotFoundException,
+    InvalidArgumentException,
+    InvalidCredentialsException,
+    ExceptionSerialize
+};
+
 class ViewController
 {
 
@@ -31,7 +41,21 @@ class ViewController
 
     public function dashboard(): string
     {
-        return $this->render('dashboard');
+        $userId = $_SESSION['userId'] ?? null;
+        $currentUser = null;
+
+        if ($userId !== null) {
+            try {
+                $currentUser = (new UserService())->findByIdService($userId, $userId);
+            } catch (ResourceNotFoundException) {
+                unset($_SESSION['userId'], $_SESSION['csrfToken']);
+            }
+        }
+
+        return $this->render('dashboard', [
+            'trips' => (new TripService())->findAvailablesTripsService(),
+            'currentUser' => $currentUser
+        ]);
     }
 
     public function test(): string
