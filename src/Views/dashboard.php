@@ -44,14 +44,16 @@
             foreach ($trips as $trip):
             ?>
                 <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
+                    <td><?= htmlspecialchars($trip->departureAgency->getName()) ?></td>
+                    <td><?= htmlspecialchars($trip->trip->getDepartureAt()->format('d/m/Y')) ?></td>
+                    <td><?= htmlspecialchars($trip->trip->getDepartureAt()->format('H:m')) ?></td>
+                    <td><?= htmlspecialchars($trip->arrivalAgency->getName()) ?></td>
+                    <td><?= htmlspecialchars($trip->trip->getArrivalAt()->format('d/m/Y')) ?></td>
+                    <td><?= htmlspecialchars($trip->trip->getArrivalAt()->format('H:m')) ?></td>
+                    <td><?= htmlspecialchars($trip->trip->getAvailablePlaces()) ?></td>
+                    <td><input type="button" value="voir"><?php
+
+                                                            ?><input type="button" value="modifier"><input type="button" value="supprimer"></td>
                 </tr>
 
             <?php endforeach; ?>
