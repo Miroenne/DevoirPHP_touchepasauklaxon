@@ -14,7 +14,7 @@
     <div>
         <?php
         if ($currentUser === null): ?>
-            <button>Connexion</button>
+            <a href="/test">Connexion</a>
         <?php elseif (isset($currentUser) && $currentUser->getIsAdmin() === true): ?>
 
 
