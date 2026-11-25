@@ -32,5 +32,10 @@ return [
 
     // --------- Views ---------
     ['GET', '/', [ViewController::class, 'dashboard'], [], 'html'],
-    ['GET', '/test', [ViewController::class, 'test'], [], 'html']
+    ['GET', '/test', [ViewController::class, 'test'], [], 'html'],
+    ['GET', '/login', [ViewController::class, 'login'], [], 'html'],
+    ['GET', '/users', [ViewController::class, 'users'], [], 'html'],
+    ['GET', '/trips', [ViewController::class, 'trips'], [], 'html'],
+    ['GET', '/agencies', [ViewController::class, 'agencies'], [], 'html'],
+    ['GET', '/error', [ViewController::class, 'error'], [], 'html']
 ];

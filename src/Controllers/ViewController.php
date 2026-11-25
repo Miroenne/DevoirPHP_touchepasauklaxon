@@ -11,6 +11,7 @@ use App\Exceptions\{
     InvalidCredentialsException,
     ExceptionSerialize
 };
+use App\Models\User;
 
 class ViewController
 {
@@ -37,20 +38,30 @@ class ViewController
         }
     }
 
-
-
-    public function dashboard(): string
+    private function userCheck(): ?User
     {
         $userId = $_SESSION['userId'] ?? null;
         $currentUser = null;
 
-        if ($userId !== null) {
-            try {
-                $currentUser = (new UserService())->findByIdService($userId, $userId);
-            } catch (ResourceNotFoundException) {
-                unset($_SESSION['userId'], $_SESSION['csrfToken']);
-            }
+        if ($userId === null) {
+            return null;
         }
+
+
+        try {
+            return $currentUser = (new UserService())->findByIdService($userId, $userId);
+        } catch (ResourceNotFoundException) {
+            unset($_SESSION['userId'], $_SESSION['csrfToken']);
+            return null;
+        }
+    }
+
+
+
+    public function dashboard(): string
+    {
+
+        $currentUser = $this->userCheck();
 
         return $this->render('dashboard', [
             'trips' => (new TripService())->findAvailablesTripsService(),
@@ -61,5 +72,80 @@ class ViewController
     public function test(): string
     {
         return $this->render('test');
+    }
+
+    public function login(): string
+    {
+        return $this->render('login');
+    }
+
+    public function users(): string
+    {
+        $currentUser = $this->userCheck();
+
+        if ($currentUser === null) {
+            http_response_code(401);
+            return $this->render('error', [
+                'message' => 'Vous devez être connecté',
+                'code' => 401
+            ]);
+        }
+
+        $userId = $currentUser->getId();
+
+        if ($currentUser->getIsAdmin() !== true) {
+            http_response_code(403);
+            return $this->render('error', ['message' => 'Accès réservé aux administrateurs', 'code' => 403]);
+        }
+
+
+        return $this->render('users', [
+            'users' => (new UserService())->findAllService($userId),
+            'currentUser' => $currentUser
+        ]);
+    }
+
+    public function trips(): string
+    {
+        $currentUser = $this->userCheck();
+
+        if ($currentUser === null) {
+            http_response_code(401);
+            return $this->render('error', [
+                'message' => 'Vous devez être connecté',
+                'code' => 401
+            ]);
+        }
+
+        $userId = $currentUser->getId();
+
+        if ($currentUser->getIsAdmin() !== true) {
+            http_response_code(403);
+            return $this->render('error', ['message' => 'Accès réservé aux administrateurs', 'code' => 403]);
+        }
+
+        return $this->render('trips');
+    }
+
+    public function agencies(): string
+    {
+        $currentUser = $this->userCheck();
+
+        if ($currentUser === null) {
+            http_response_code(401);
+            return $this->render('error', [
+                'message' => 'Vous devez être connecté',
+                'code' => 401
+            ]);
+        }
+
+        $userId = $currentUser->getId();
+
+        if ($currentUser->getIsAdmin() !== true) {
+            http_response_code(403);
+            return $this->render('error', ['message' => 'Accès réservé aux administrateurs', 'code' => 403]);
+        }
+
+        return $this->render('agencies');
     }
 }

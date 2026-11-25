@@ -16,12 +16,16 @@
     }
   ],
   "minimum-stability": "stable",
-  "require": {},
+  "require": {
+    "twbs/bootstrap": "^5.3"
+  },
   "scripts": {
     "dev-serv": [
       "Composer\\Config::disableProcessTimeout",
       "php -S localhost:8080 -t public public/index.php"
-    ]
+    ],
+    "css": "sass scss/custom.scss public/css/app.css --style=compressed --quiet-deps",
+    "css:watch": "sass --watch scss/custom.scss public/css/app.css --quiet-deps"
   },
   "scripts-descriptions": {
     "dev-serv": "start development server on port 8080"

@@ -1,0 +1,28 @@
+$primary: #00497c;
+$secondary: #0074c7;
+
+@import "../vendor/twbs/bootstrap/scss/bootstrap";
+
+h2 {
+}
+
+h1 {
+  font-size: small;
+  color: $primary;
+}
+
+a {
+  text-decoration: none;
+}
+
+caption {
+  caption-side: top;
+}
+
+input {
+  background-color: $primary;
+}
+
+input:hover {
+  background-color: $secondary;
+}
