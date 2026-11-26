@@ -37,5 +37,7 @@ return [
     ['GET', '/users', [ViewController::class, 'users'], [], 'html'],
     ['GET', '/trips', [ViewController::class, 'trips'], [], 'html'],
     ['GET', '/agencies', [ViewController::class, 'agencies'], [], 'html'],
-    ['GET', '/error', [ViewController::class, 'error'], [], 'html']
+    ['GET', '/error', [ViewController::class, 'error'], [], 'html'],
+    ['POST', '/login', [ViewController::class, 'loginSubmit'], [], 'html'],
+    ['POST', '/logout', [ViewController::class, 'logoutSubmit'],    ['auth', 'csrf'], 'html'],
 ];

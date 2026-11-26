@@ -69,7 +69,7 @@ class UserController extends Controller
             $connect = $service->login($email, $password);
 
             $_SESSION['userId'] = $connect['user']->getId();
-            $_SESSION['csrfToken'] = $connect['csrfToken'];            
+            $_SESSION['csrfToken'] = $connect['csrfToken'];
 
             $user = $connect['user'];
             $csrfToken = $connect['csrfToken'];
@@ -115,18 +115,6 @@ class UserController extends Controller
                     ]
                 );
             }
-
-            setcookie(
-                'csrf-token',
-                '',
-                [
-                    'expires' => time() - 3600,
-                    'path' => '/',
-                    'httponly' => true,
-                    'secure' => true,
-                    'samesite' => 'none'
-                ]
-            );
 
             session_destroy();
             $res = ['message' => 'Déconnexion réussie', 'responseCode' => 200];

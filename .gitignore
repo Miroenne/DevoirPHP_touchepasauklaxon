@@ -5,4 +5,5 @@
 /vendor/
 test.php
 env/
+/node_modules
 

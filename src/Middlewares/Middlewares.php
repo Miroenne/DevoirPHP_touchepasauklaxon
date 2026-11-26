@@ -5,10 +5,12 @@ namespace App\Middlewares;
 use App\Exceptions\{UnthorizedException, ForbiddenException};
 use App\Repositories\UserRepository;
 
-class Middlewares{
-    
-    public function run(string $name): void {
-        match($name){
+class Middlewares
+{
+
+    public function run(string $name): void
+    {
+        match ($name) {
             'auth' => $this->auth(),
             'admin' => $this->admin(),
             'csrf' => $this->csrf(),
@@ -16,10 +18,11 @@ class Middlewares{
         };
     }
 
-    private function auth(): void {
+    private function auth(): void
+    {
         $userId = $_SESSION['userId'] ?? null;
 
-        if($userId === null){
+        if ($userId === null) {
             throw new UnthorizedException('Authentification required');
         }
 
@@ -27,19 +30,21 @@ class Middlewares{
         $_POST['userId'] = $userId;
     }
 
-    private function csrf(): void {
-        $sent = $_SERVER['HTTP_X_CSRF_TOKEN'] ?? '';
+    private function csrf(): void
+    {
+        $sent = $_SERVER['HTTP_X_CSRF_TOKEN'] ?? $_POST['csrf_token'] ?? '';
         $stored = $_SESSION['csrfToken'] ?? '';
 
-        if($sent === '' || !hash_equals($stored, $sent)){
+        if ($sent === '' || !hash_equals($stored, $sent)) {
             throw new ForbiddenException('Invalid CSRF token');
         }
     }
 
-    private function admin(): void {
+    private function admin(): void
+    {
         $user = (new UserRepository())->findById($_SESSION['userId']);
 
-        if($user === null || $user->getIsAdmin() === false){
+        if ($user === null || $user->getIsAdmin() === false) {
             throw new ForbiddenException('Admin privileges required');
         }
     }
